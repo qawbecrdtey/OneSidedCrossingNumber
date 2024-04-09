@@ -18,34 +18,41 @@ namespace oscm {
             reset(data_);
         }
 
+        [[nodiscard]]
+        std::uint32_t size() const noexcept {
+            return _size;
+        }
+
         void reset() const { std::fill(_tree.get(), _tree.get() + (_size << 2), 0); }
 
-        void reset(std::uint64_t const *data_) const { reset(data_, 1, 1, _size); }
+        void reset(std::uint64_t const *const data_) const { reset(data_, 1, 1, _size); }
 
-        void update(std::uint32_t idx_, std::uint64_t val_) const {
+        void update(std::uint32_t const idx_, std::uint64_t const val_) const {
             update(1, idx_, val_, 1, _size);
         }
 
-        void update_increment(std::uint32_t idx_, std::uint64_t val_) const {
+        void update_increment(std::uint32_t const idx_, std::uint64_t const val_) const {
             update_increment(1, idx_, val_, 1, _size);
         }
 
-        void update_decrement(std::uint32_t idx_, std::uint64_t val_) const {
+        void update_decrement(std::uint32_t const idx_, std::uint64_t const val_) const {
             update_decrement(1, idx_, val_, 1, _size);
         }
 
         [[nodiscard]]
-        std::uint64_t sum(std::uint32_t lo_, std::uint32_t hi_) const {
+        std::uint64_t sum(std::uint32_t const lo_, std::uint32_t const hi_) const {
             return sum(1, lo_, hi_, 1, _size);
         }
 
     private:
-        std::unique_ptr<std::uint64_t[]> _tree;
+        std::unique_ptr<std::uint64_t[]> const _tree;
         std::uint32_t const _size;
 
-        void
-        reset(std::uint64_t const *data_, std::uint32_t tidx_, std::uint32_t lo_, std::uint32_t hi_)
-          const {
+        void reset(
+          std::uint64_t const *data_,
+          std::uint32_t const tidx_,
+          std::uint32_t const lo_,
+          std::uint32_t const hi_) const {
             if(lo_ == hi_) {
                 _tree[tidx_] = data_[lo_];
                 return;
@@ -57,11 +64,11 @@ namespace oscm {
         }
 
         void update(
-          std::uint32_t tidx_,
-          std::uint32_t idx_,
-          std::uint64_t val_,
-          std::uint32_t lo_,
-          std::uint32_t hi_) const {
+          std::uint32_t const tidx_,
+          std::uint32_t const idx_,
+          std::uint64_t const val_,
+          std::uint32_t const lo_,
+          std::uint32_t const hi_) const {
             if(idx_ < lo_ || hi_ < idx_) { return; }
             if(lo_ == hi_) {
                 _tree[tidx_] = val_;
@@ -74,11 +81,11 @@ namespace oscm {
         }
 
         void update_increment(
-          std::uint32_t tidx_,
-          std::uint32_t idx_,
-          std::uint64_t val_,
-          std::uint32_t lo_,
-          std::uint32_t hi_) const {
+          std::uint32_t const tidx_,
+          std::uint32_t const idx_,
+          std::uint64_t const val_,
+          std::uint32_t const lo_,
+          std::uint32_t const hi_) const {
             if(idx_ < lo_ || hi_ < idx_) { return; }
             _tree[tidx_] += val_;
             if(lo_ == hi_) { return; }
@@ -88,11 +95,11 @@ namespace oscm {
         }
 
         void update_decrement(
-          std::uint32_t tidx_,
-          std::uint32_t idx_,
-          std::uint64_t val_,
-          std::uint32_t lo_,
-          std::uint32_t hi_) const {
+          std::uint32_t const tidx_,
+          std::uint32_t const idx_,
+          std::uint64_t const val_,
+          std::uint32_t const lo_,
+          std::uint32_t const hi_) const {
             if(idx_ < lo_ || hi_ < idx_) { return; }
             assert(val_ <= _tree[tidx_]);
             _tree[tidx_] -= val_;
@@ -104,11 +111,11 @@ namespace oscm {
 
         [[nodiscard]]
         std::uint64_t sum(
-          std::uint32_t tidx_,
-          std::uint32_t start_,
-          std::uint32_t end_,
-          std::uint32_t lo_,
-          std::uint32_t hi_) const {
+          std::uint32_t const tidx_,
+          std::uint32_t const start_,
+          std::uint32_t const end_,
+          std::uint32_t const lo_,
+          std::uint32_t const hi_) const {
             if(hi_ < start_ || end_ < lo_) { return 0; }
             if(start_ <= lo_ && hi_ <= end_) { return _tree[tidx_]; }
             std::uint32_t const m = (lo_ + hi_) >> 1;
