@@ -1,5 +1,5 @@
-#ifndef ONESIDEDCROSSINGNUMBER_WRITE_TO_FILE_H
-#define ONESIDEDCROSSINGNUMBER_WRITE_TO_FILE_H
+#ifndef ONESIDEDCROSSINGNUMBER_OSCM_WRITE_TO_FILE_H
+#define ONESIDEDCROSSINGNUMBER_OSCM_WRITE_TO_FILE_H
 
 #include <cstdint>
 #include <fstream>
@@ -11,11 +11,11 @@ namespace oscm {
         std::ofstream ofs(output_file_name_);
         if(!ofs) {
             std::cerr << "Failed to open file of filename. Printing result to stdout." << std::endl;
-            for(std::uint32_t vertex: ordering_) { std::cout << vertex << '\n'; }
+            for(std::uint32_t vertex: ordering_) { std::cout << vertex + 1 << '\n'; }
             return;
         }
-        for(std::uint32_t vertex: ordering_) { ofs << vertex << '\n'; }
+        for(std::uint32_t vertex: ordering_) { ofs << vertex + 1 << '\n'; }
     }
 }  // namespace oscm
 
-#endif  // ONESIDEDCROSSINGNUMBER_WRITE_TO_FILE_H
+#endif  // ONESIDEDCROSSINGNUMBER_OSCM_WRITE_TO_FILE_H

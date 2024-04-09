@@ -57,6 +57,10 @@ namespace oscm {
                 _tree[tidx_] = data_[lo_];
                 return;
             }
+#if __has_cpp_attribute(assume)
+            [[assume(hi_ <= std::numeric_limits<std::uint32_t>::max() - lo_)]];
+            [[assume(tidx_ <= (std::numeric_limits<std::uint32_t>::max() >> 1))]];
+#endif
             std::uint32_t const m = (lo_ + hi_) >> 1;
             reset(data_, tidx_ << 1, lo_, m);
             reset(data_, (tidx_ << 1) | 1, m + 1, hi_);
@@ -75,6 +79,10 @@ namespace oscm {
                 return;
             }
             std::uint32_t const m = (lo_ + hi_) >> 1;
+#if __has_cpp_attribute(assume)
+            [[assume(hi_ <= std::numeric_limits<std::uint32_t>::max() - lo_)]];
+            [[assume(tidx_ <= (std::numeric_limits<std::uint32_t>::max() >> 1))]];
+#endif
             update(tidx_ << 1, idx_, val_, lo_, m);
             update((tidx_ << 1) | 1, idx_, val_, m + 1, hi_);
             _tree[tidx_] = _tree[tidx_ << 1] + _tree[(tidx_ << 1) | 1];
@@ -89,6 +97,10 @@ namespace oscm {
             if(idx_ < lo_ || hi_ < idx_) { return; }
             _tree[tidx_] += val_;
             if(lo_ == hi_) { return; }
+#if __has_cpp_attribute(assume)
+            [[assume(hi_ <= std::numeric_limits<std::uint32_t>::max() - lo_)]];
+            [[assume(tidx_ <= (std::numeric_limits<std::uint32_t>::max() >> 1))]];
+#endif
             std::uint32_t const m = (lo_ + hi_) >> 1;
             update_increment(tidx_ << 1, idx_, val_, lo_, m);
             update_increment((tidx_ << 1) | 1, idx_, val_, m + 1, hi_);
@@ -102,8 +114,15 @@ namespace oscm {
           std::uint32_t const hi_) const {
             if(idx_ < lo_ || hi_ < idx_) { return; }
             assert(val_ <= _tree[tidx_]);
+#if __has_cpp_attribute(assume)
+            [[assume(val_ <= _tree[tidx_])]];
+#endif
             _tree[tidx_] -= val_;
             if(lo_ == hi_) { return; }
+#if __has_cpp_attribute(assume)
+            [[assume(hi_ <= std::numeric_limits<std::uint32_t>::max() - lo_)]];
+            [[assume(tidx_ <= (std::numeric_limits<std::uint32_t>::max() >> 1))]];
+#endif
             std::uint32_t const m = (lo_ + hi_) >> 1;
             update_decrement(tidx_ << 1, idx_, val_, lo_, m);
             update_decrement((tidx_ << 1) | 1, idx_, val_, m + 1, hi_);
@@ -118,6 +137,10 @@ namespace oscm {
           std::uint32_t const hi_) const {
             if(hi_ < start_ || end_ < lo_) { return 0; }
             if(start_ <= lo_ && hi_ <= end_) { return _tree[tidx_]; }
+#if __has_cpp_attribute(assume)
+            [[assume(hi_ <= std::numeric_limits<std::uint32_t>::max() - lo_)]];
+            [[assume(tidx_ <= (std::numeric_limits<std::uint32_t>::max() >> 1))]];
+#endif
             std::uint32_t const m = (lo_ + hi_) >> 1;
             auto const x = sum(tidx_ << 1, start_, end_, lo_, m);
             auto const y = sum((tidx_ << 1) | 1, start_, end_, m + 1, hi_);
