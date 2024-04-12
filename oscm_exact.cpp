@@ -39,9 +39,18 @@ int main(int argc, char *argv[]) {
     [[assume(nB > 0)]];
 #endif
 
+    std::cout << "edges:\n";
+    for(auto [u, v] : edges) {
+        std::cout << u << ' ' << v << '\n';
+    }
+    std::cout << std::endl;
+
     std::vector<std::uint32_t> ordering(nB);
     std::iota(ordering.begin(), ordering.end(), nA);
     std::uint64_t crossing_upper_bound = oscm::count_crossings(nA, nB, ordering.data(), edges);
+
+    std::cout << "crossing_upper_bound: " << crossing_upper_bound << std::endl;
+
     oscm::compute_ordering(nA, nB, edges, ordering, crossing_upper_bound);
 
     oscm::write_to_file(argv[2], ordering);

@@ -1,6 +1,8 @@
 #ifndef ONESIDEDCROSSINGNUMBER_OSCM_READ_FILE_H
 #define ONESIDEDCROSSINGNUMBER_OSCM_READ_FILE_H
 
+#include <oscm/comp_second.h>
+
 #include <algorithm>
 #include <cstdint>
 #include <fstream>
@@ -21,18 +23,18 @@ namespace oscm {
         char str[4];
         std::uint64_t m;
         ifs >> str >> str >> nA_ >> nB_ >> m;
-#if __has_cpp_attribute(assume)
+# if __has_cpp_attribute(assume)
         [[assume(nA_)]];
         [[assume(nB_)]];
         [[assume(m)]];
-#endif
+# endif
         edges_.resize(m);
         for(auto &[first, second]: edges_) {
             ifs >> first >> second;
-#if __has_cpp_attribute(assume)
+# if __has_cpp_attribute(assume)
             [[assume(first)]];
             [[assume(second)]];
-#endif
+# endif
             first--;
             second--;
         }
@@ -52,28 +54,28 @@ namespace oscm {
             if(line[0] == 'p') {
                 std::string str;
                 iss >> str >> str >> nA_ >> nB_ >> m;
-#if __has_cpp_attribute(assume)
+# if __has_cpp_attribute(assume)
                 [[assume(nA_)]];
                 [[assume(nB_)]];
                 [[assume(m)]];
-#endif
+# endif
                 edges_.resize(m);
                 continue;
             }
             iss >> edges_[idx].first >> edges_[idx].second;
-#if __has_cpp_attribute(assume)
+# if __has_cpp_attribute(assume)
             [[assume(edges_[idx].first)]];
             [[assume(edges_[idx].second)]];
-#endif
+# endif
             edges_[idx].first--;
             edges_[idx].second--;
-#if __has_cpp_attribute(assume)
+# if __has_cpp_attribute(assume)
             [[assume(idx < std::numeric_limits<std::uint32_t>::max())]];
-#endif
+# endif
             idx++;
         }
 #endif
-        std::sort(edges_.begin(), edges_.end(), [](auto a, auto b) { return a.first < b.first; });
+        std::sort(edges_.begin(), edges_.end(), comp_second);
     }
 }  // namespace oscm
 #endif  // ONESIDEDCROSSINGNUMBER_OSCM_READ_FILE_H
