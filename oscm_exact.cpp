@@ -53,19 +53,7 @@ int main(int argc, char *argv[]) {
 
     oscm::compute_ordering(nA, nB, edges, ordering, crossing_upper_bound);
 
-    oscm::write_to_file(argv[2], ordering);
+    std::cout << "current crossing count: " << oscm::count_crossings(nA, nB, ordering.data(), edges) << '\n';
 
-    std::vector<std::vector<std::uint32_t>> directed_edges(5);
-    directed_edges[0].push_back(1);
-    directed_edges[0].push_back(2);
-    directed_edges[0].push_back(3);
-    directed_edges[0].push_back(4);
-    directed_edges[1].push_back(3);
-    directed_edges[2].push_back(3);
-    directed_edges[2].push_back(4);
-    directed_edges[3].push_back(4);
-    auto const val = oscm::transitive_reduction(directed_edges);
-    for(std::uint32_t i = 0; i < val.size(); i++) {
-        for(auto const next: val[i]) { std::cout << i << ' ' << next << '\n'; }
-    }
+    oscm::write_to_file(argv[2], ordering);
 }

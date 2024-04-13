@@ -11,9 +11,9 @@
 
 namespace oscm {
     std::uint64_t count_crossings(
-      std::uint32_t n1_,
-      std::uint32_t n2_,
-      std::uint32_t const *v2_,
+      std::uint32_t const n1_,
+      std::uint32_t const n2_,
+      std::uint32_t const *const v2_,
       std::vector<std::pair<std::uint32_t, std::uint32_t>> const &edges_) {
         segment_tree tree(n1_);
         std::uint64_t res = 0;

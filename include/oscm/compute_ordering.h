@@ -4,6 +4,7 @@
 #include <oscm/find_pattern_and_set_edge.h>
 #include <oscm/transitive_reduction.h>
 
+#include <algorithm>
 #include <cstdint>
 #include <iostream>
 #include <utility>
@@ -21,21 +22,19 @@ namespace oscm {
 
         std::cout << "ordering:\n";
         for(std::uint32_t i = 0; i < nB_; i++) {
-            for(auto const next : directed_edges[i]) {
-                std::cout << i << ' ' << next << '\n';
-            }
+            for(auto const next: directed_edges[i]) { std::cout << i << ' ' << next << '\n'; }
         }
         std::cout << std::endl;
-
 
         std::cout << "transitive reduced ordering:\n";
         directed_edges = transitive_reduction(directed_edges);
         for(std::uint32_t i = 0; i < nB_; i++) {
-            for(auto const next : directed_edges[i]) {
-                std::cout << i << ' ' << next << '\n';
-            }
+            for(auto const next: directed_edges[i]) { std::cout << i << ' ' << next << '\n'; }
         }
         std::cout << std::endl;
+
+        ordering_ = topological_sort(directed_edges);
+        for(auto &now: ordering_) { now += nA_; }
     }
 }  // namespace oscm
 
