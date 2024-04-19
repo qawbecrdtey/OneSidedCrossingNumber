@@ -1,22 +1,27 @@
-#ifndef ONESIDEDCROSSINGNUMBER_OSCM_FIND_PATTERN_0_J_H
-#define ONESIDEDCROSSINGNUMBER_OSCM_FIND_PATTERN_0_J_H
+#ifndef ONESIDEDCROSSINGNUMBER_OSCM_FIND_PATTERN_AND_SET_EDGE_H
+#define ONESIDEDCROSSINGNUMBER_OSCM_FIND_PATTERN_AND_SET_EDGE_H
 
+#include <oscm/comp_second.h>
 #include <oscm/count_crossings.h>
 #include <oscm/equal_neighbor.h>
 
+#include <algorithm>
 #include <cassert>
 #include <cstdint>
 #include <functional>
+#include <iostream>
 #include <unordered_set>
+#include <utility>
 #include <vector>
 
 namespace oscm {
     /**
-     *
-     * @param nA_
-     * @param nB_
-     * @param edges_
-     * @param directed_edges_ will be updated to contain directed edges from B to B, labeled as v - nA_.
+     * Finds certain pattern and sets a directed edge of B, where a -> b implies a < b.
+     * @param nA_ Number of vertices of A.
+     * @param nB_ Number of vertices of B.
+     * @param edges_ Edges as pair of vertices.
+     * @param directed_edges_ will be updated to contain directed edges from B to B, labeled as v -
+     * nA_.
      */
     void find_pattern_and_set_edge(
       std::uint32_t const nA_,
@@ -42,11 +47,50 @@ namespace oscm {
 #if __has_cpp_attribute(assume)
                 [[assume(Cij || Cji)]];
 #endif
-                if(!Cij) { directed_edges_[i - nA_].push_back(j - nA_); }
-                else if(!Cji) { directed_edges_[j - nA_].push_back(i - nA_); }
+
+                if(!Cij) {
+                    directed_edges_[i - nA_].push_back(j - nA_);
+                    continue;
+                }
+                if(!Cji) {
+                    directed_edges_[j - nA_].push_back(i - nA_);
+                    continue;
+                }
+
+                if(Cij == 1 && Cji == 2) {
+                    auto const it_lo_i = std::lower_bound(
+                      edges_.begin(), edges_.end(), std::make_pair(0u, i), comp_second);
+                    auto const it_hi_i = std::upper_bound(
+                      edges_.begin(), edges_.end(), std::make_pair(0u, i), comp_second);
+                    if(it_hi_i - it_lo_i != 2) { continue; }
+                    auto const it_lo_j = std::lower_bound(
+                      edges_.begin(), edges_.end(), std::make_pair(0u, j), comp_second);
+                    auto const it_hi_j = std::upper_bound(
+                      edges_.begin(), edges_.end(), std::make_pair(0u, j), comp_second);
+                    if(it_hi_j - it_lo_j != 2) { continue; }
+
+                    directed_edges_[i - nA_].push_back(j - nA_);
+                    continue;
+                }
+
+                if(Cij == 2 && Cji == 1) {
+                    auto const it_lo_i = std::lower_bound(
+                      edges_.begin(), edges_.end(), std::make_pair(0u, i), comp_second);
+                    auto const it_hi_i = std::upper_bound(
+                      edges_.begin(), edges_.end(), std::make_pair(0u, i), comp_second);
+                    if(it_hi_i - it_lo_i != 2) { continue; }
+                    auto const it_lo_j = std::lower_bound(
+                      edges_.begin(), edges_.end(), std::make_pair(0u, j), comp_second);
+                    auto const it_hi_j = std::upper_bound(
+                      edges_.begin(), edges_.end(), std::make_pair(0u, j), comp_second);
+                    if(it_hi_j - it_lo_j != 2) { continue; }
+
+                    directed_edges_[j - nA_].push_back(i - nA_);
+                    continue;
+                }
             }
         }
     }
 }  // namespace oscm
 
-#endif  // ONESIDEDCROSSINGNUMBER_OSCM_FIND_PATTERN_0_J_H
+#endif  // ONESIDEDCROSSINGNUMBER_OSCM_FIND_PATTERN_AND_SET_EDGE_H

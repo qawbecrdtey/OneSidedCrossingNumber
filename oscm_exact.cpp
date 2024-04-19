@@ -1,9 +1,8 @@
 #include <oscm/bipartite_graph.h>
-#include <oscm/compute_ordering.h>
+#include <oscm/compute_ordering_primary.h>
 #include <oscm/count_crossings.h>
 #include <oscm/read_from_file.h>
 #include <oscm/segment_tree.h>
-#include <oscm/transitive_reduction.h>
 #include <oscm/write_to_file.h>
 
 #include <cstdint>
@@ -40,9 +39,7 @@ int main(int argc, char *argv[]) {
 #endif
 
     std::cout << "edges:\n";
-    for(auto [u, v] : edges) {
-        std::cout << u << ' ' << v << '\n';
-    }
+    for(auto [u, v]: edges) { std::cout << u << ' ' << v << '\n'; }
     std::cout << std::endl;
 
     std::vector<std::uint32_t> ordering(nB);
@@ -51,9 +48,12 @@ int main(int argc, char *argv[]) {
 
     std::cout << "crossing_upper_bound: " << crossing_upper_bound << std::endl;
 
-    oscm::compute_ordering(nA, nB, edges, ordering, crossing_upper_bound);
+    oscm::compute_ordering_primary(nA, nB, edges, ordering, crossing_upper_bound);
 
     std::cout << "current crossing count: " << oscm::count_crossings(nA, nB, ordering.data(), edges) << '\n';
 
     oscm::write_to_file(argv[2], ordering);
 }
+
+// References:
+// [1] Fixed parameter algorithms for ONE-SIDED CROSSING MINIMIZATION revisited
