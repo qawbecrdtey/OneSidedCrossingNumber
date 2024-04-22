@@ -12,7 +12,7 @@ namespace oscm {
     [[nodiscard]]
     std::vector<std::vector<std::uint32_t>>
     transitive_reduction(std::vector<std::vector<std::uint32_t>> &directed_edges_) {
-        auto topological_ordering = topological_sort(directed_edges_);
+        auto const topological_ordering = topological_sort(directed_edges_);
         std::vector<std::uint32_t> topological_ordering_inverse(directed_edges_.size());
         for(std::uint32_t i = 0; i < directed_edges_.size(); i++) {
             topological_ordering_inverse[topological_ordering[i]] = i;
