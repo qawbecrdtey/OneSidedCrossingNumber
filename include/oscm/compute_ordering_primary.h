@@ -4,6 +4,7 @@
 #include <oscm/count_crossings.h>
 #include <oscm/find_pattern_and_set_edge.h>
 #include <oscm/is_directed_acyclic.h>
+#include <oscm/partial_order_fixed_points.h>
 #include <oscm/transitive_reduction.h>
 
 #include <algorithm>
