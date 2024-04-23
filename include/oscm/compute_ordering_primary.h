@@ -31,9 +31,7 @@ namespace oscm {
 
         std::cout << "modified_directed_edges:\n";
         for(std::uint32_t i = 0; i < modified_directed_edges.size(); i++) {
-            for(auto next : modified_directed_edges[i]) {
-                std::cout << i << ' ' << next << '\n';
-            }
+            for(auto next: modified_directed_edges[i]) { std::cout << i << ' ' << next << '\n'; }
         }
         std::cout << std::endl;
 

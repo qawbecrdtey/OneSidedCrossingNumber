@@ -50,7 +50,8 @@ int main(int argc, char *argv[]) {
 
     oscm::compute_ordering_primary(nA, nB, edges, ordering, crossing_upper_bound);
 
-    std::cout << "current crossing count: " << oscm::count_crossings(nA, nB, ordering.data(), edges) << '\n';
+    std::cout
+      << "current crossing count: " << oscm::count_crossings(nA, nB, ordering.data(), edges) << '\n';
 
     oscm::write_to_file(argv[2], ordering);
 }

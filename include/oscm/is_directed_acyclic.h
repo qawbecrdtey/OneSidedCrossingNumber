@@ -28,7 +28,7 @@ namespace oscm {
         while(!ordering_stack.empty()) {
             result.push_back(ordering_stack.back());
             ordering_stack.pop_back();
-            for(auto const next : directed_edges_[result.back()]) {
+            for(auto const next: directed_edges_[result.back()]) {
                 if(--in_deg[next]) { continue; }
                 ordering_stack.push_back(next);
             }

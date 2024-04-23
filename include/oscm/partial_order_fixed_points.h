@@ -34,7 +34,7 @@ namespace oscm {
             invalid_range[inverse_map[v]]--;
 
             idx = vertices_count;
-            for(auto const next : directed_edges_[v]) {
+            for(auto const next: directed_edges_[v]) {
                 if(idx < inverse_map[next]) { idx = inverse_map[next]; }
             }
             invalid_range[inverse_map[v] + 1]++;
@@ -46,9 +46,7 @@ namespace oscm {
         std::int32_t sum = 0;
         for(std::uint32_t i = 0; i < vertices_count; i++) {
             sum += invalid_range[i];
-            if(!sum) {
-                result.push_back(topological_ordering[i]);
-            }
+            if(!sum) { result.push_back(topological_ordering[i]); }
         }
 
         return result;
