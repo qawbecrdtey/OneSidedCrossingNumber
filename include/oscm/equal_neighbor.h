@@ -12,19 +12,19 @@ namespace oscm {
     bool equal_neighbor(
       std::uint32_t i_,
       std::uint32_t j_,
-      std::vector<std::pair<std::uint32_t, std::uint32_t>> const &edges_) {
+      std::vector<std::pair<std::uint32_t, std::uint32_t>> const &connections_) {
         static std::unordered_set<std::uint32_t> set;
         set.clear();
 
-        auto lo_i =
-          std::lower_bound(edges_.begin(), edges_.end(), std::make_pair(0u, i_), comp_second);
-        auto const hi_i =
-          std::upper_bound(edges_.begin(), edges_.end(), std::make_pair(0u, i_), comp_second);
+        auto lo_i = std::lower_bound(
+          connections_.begin(), connections_.end(), std::make_pair(0u, i_), comp_second);
+        auto const hi_i = std::upper_bound(
+          connections_.begin(), connections_.end(), std::make_pair(0u, i_), comp_second);
 
-        auto lo_j =
-          std::lower_bound(edges_.begin(), edges_.end(), std::make_pair(0u, j_), comp_second);
-        auto const hi_j =
-          std::upper_bound(edges_.begin(), edges_.end(), std::make_pair(0u, j_), comp_second);
+        auto lo_j = std::lower_bound(
+          connections_.begin(), connections_.end(), std::make_pair(0u, j_), comp_second);
+        auto const hi_j = std::upper_bound(
+          connections_.begin(), connections_.end(), std::make_pair(0u, j_), comp_second);
 
         if(hi_i - lo_i != hi_j - lo_j) { return false; }
 

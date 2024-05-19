@@ -1,5 +1,5 @@
-#ifndef ONESIDEDCROSSINGNUMBER_OSCM_COMPUTE_ORDERING_H
-#define ONESIDEDCROSSINGNUMBER_OSCM_COMPUTE_ORDERING_H
+#ifndef ONESIDEDCROSSINGNUMBER_OSCM_COMPUTE_ORDERING_PRIMARY_H
+#define ONESIDEDCROSSINGNUMBER_OSCM_COMPUTE_ORDERING_PRIMARY_H
 
 #include <oscm/count_crossings.h>
 #include <oscm/find_pattern_and_set_edge.h>
@@ -17,11 +17,11 @@ namespace oscm {
     void compute_ordering_primary(
       std::uint32_t const nA_,
       std::uint32_t const nB_,
-      std::vector<std::pair<std::uint32_t, std::uint32_t>> const &edges_,
+      std::vector<std::pair<std::uint32_t, std::uint32_t>> const &connections_,
       std::vector<std::uint32_t> &ordering_,
-      std::uint64_t &crossing_uppper_bound) {
+      std::uint64_t &crossing_uppper_bound_) {
         std::vector<std::vector<std::uint32_t>> directed_edges(nB_);
-        find_pattern_and_set_edge(nA_, nB_, edges_, directed_edges);
+        find_pattern_and_set_edge(nA_, nB_, connections_, directed_edges);
 
         assert(is_directed_acyclic(directed_edges));
 
@@ -37,11 +37,11 @@ namespace oscm {
 
         ordering_ = topological_sort(directed_edges);
         for(auto &now: ordering_) { now += nA_; }
-        if(auto const crossing = count_crossings(nA_, nB_, ordering_.data(), edges_);
-           crossing < crossing_uppper_bound) {
-            crossing_uppper_bound = crossing;
+        if(auto const crossing = count_crossings(nA_, nB_, ordering_.data(), connections_);
+           crossing < crossing_uppper_bound_) {
+            crossing_uppper_bound_ = crossing;
         }
     }
 }  // namespace oscm
 
-#endif  // ONESIDEDCROSSINGNUMBER_OSCM_COMPUTE_ORDERING_H
+#endif  // ONESIDEDCROSSINGNUMBER_OSCM_COMPUTE_ORDERING_PRIMARY_H

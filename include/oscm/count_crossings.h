@@ -14,15 +14,15 @@ namespace oscm {
       std::uint32_t const n1_,
       std::uint32_t const n2_,
       std::uint32_t const *const v2_,
-      std::vector<std::pair<std::uint32_t, std::uint32_t>> const &edges_) {
+      std::vector<std::pair<std::uint32_t, std::uint32_t>> const &connections_) {
         segment_tree tree(n1_);
         std::uint64_t res = 0;
         std::uint32_t idx = 0;
         while(idx < n2_) {
             auto lo = std::lower_bound(
-              edges_.begin(), edges_.end(), std::make_pair(0u, v2_[idx]), comp_second);
+              connections_.begin(), connections_.end(), std::make_pair(0u, v2_[idx]), comp_second);
             auto const hi = std::upper_bound(
-              edges_.begin(), edges_.end(), std::make_pair(0u, v2_[idx]), comp_second);
+              connections_.begin(), connections_.end(), std::make_pair(0u, v2_[idx]), comp_second);
             idx++;
             while(lo < hi) {
                 res += tree.sum(lo->first + 1, n1_);

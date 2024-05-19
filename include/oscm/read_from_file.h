@@ -16,7 +16,7 @@ namespace oscm {
       char const input_file_name_[],
       std::uint32_t &nA_,
       std::uint32_t &nB_,
-      std::vector<std::pair<std::uint32_t, std::uint32_t>> &edges_) {
+      std::vector<std::pair<std::uint32_t, std::uint32_t>> &connections_) {
 #ifdef NO_COMMENTS
         std::ifstream ifs(input_file_name_);
         if(!ifs) { std::cerr << "Failed to open file " << input_file_name_ << std::endl; }
@@ -28,8 +28,8 @@ namespace oscm {
         [[assume(nB_)]];
         [[assume(m)]];
 # endif
-        edges_.resize(m);
-        for(auto &[first, second]: edges_) {
+        connections_.resize(m);
+        for(auto &[first, second]: connections_) {
             ifs >> first >> second;
 # if __has_cpp_attribute(assume)
             [[assume(first)]];
@@ -59,23 +59,23 @@ namespace oscm {
                 [[assume(nB_)]];
                 [[assume(m)]];
 # endif
-                edges_.resize(m);
+                connections_.resize(m);
                 continue;
             }
-            iss >> edges_[idx].first >> edges_[idx].second;
+            iss >> connections_[idx].first >> connections_[idx].second;
 # if __has_cpp_attribute(assume)
-            [[assume(edges_[idx].first)]];
-            [[assume(edges_[idx].second)]];
+            [[assume(connections_[idx].first)]];
+            [[assume(connections_[idx].second)]];
 # endif
-            edges_[idx].first--;
-            edges_[idx].second--;
+            connections_[idx].first--;
+            connections_[idx].second--;
 # if __has_cpp_attribute(assume)
             [[assume(idx < std::numeric_limits<std::uint32_t>::max())]];
 # endif
             idx++;
         }
 #endif
-        std::sort(edges_.begin(), edges_.end(), comp_second);
+        std::sort(connections_.begin(), connections_.end(), comp_second);
     }
 }  // namespace oscm
 #endif  // ONESIDEDCROSSINGNUMBER_OSCM_READ_FILE_H
