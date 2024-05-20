@@ -30,15 +30,19 @@ namespace oscm {
             for(auto const next: reversed_direced_edges[v]) {
                 if(idx < inverse_map[next]) { idx = inverse_map[next]; }
             }
-            invalid_range[idx + 1]++;
-            invalid_range[inverse_map[v]]--;
+            if(idx + 1 < inverse_map[v]) {
+                invalid_range[idx + 1]++;
+                invalid_range[inverse_map[v]]--;
+            }
 
             idx = vertices_count;
             for(auto const next: directed_edges_[v]) {
-                if(idx < inverse_map[next]) { idx = inverse_map[next]; }
+                if(idx > inverse_map[next]) { idx = inverse_map[next]; }
             }
-            invalid_range[inverse_map[v] + 1]++;
-            invalid_range[idx]--;
+            if(inverse_map[v] + 1 < idx) {
+                invalid_range[inverse_map[v] + 1]++;
+                invalid_range[idx]--;
+            }
         }
 
         std::vector<std::uint32_t> result;
@@ -52,7 +56,7 @@ namespace oscm {
         return result;
     }
 
-    std::pair<std::vector<std::uint32_t>, std::vector<std::uint32_t>>
+    inline std::pair<std::vector<std::uint32_t>, std::vector<std::uint32_t>>
     partial_order_fixed_points_with_topological_ordering(
       std::vector<std::vector<std::uint32_t>> const &directed_edges_) {
         assert(is_directed_acyclic(directed_edges_));
@@ -73,15 +77,19 @@ namespace oscm {
             for(auto const next: reversed_direced_edges[v]) {
                 if(idx < inverse_map[next]) { idx = inverse_map[next]; }
             }
-            invalid_range[idx + 1]++;
-            invalid_range[inverse_map[v]]--;
+            if(idx + 1 < inverse_map[v]) {
+                invalid_range[idx + 1]++;
+                invalid_range[inverse_map[v]]--;
+            }
 
             idx = vertices_count;
             for(auto const next: directed_edges_[v]) {
-                if(idx < inverse_map[next]) { idx = inverse_map[next]; }
+                if(idx > inverse_map[next]) { idx = inverse_map[next]; }
             }
-            invalid_range[inverse_map[v] + 1]++;
-            invalid_range[idx]--;
+            if(inverse_map[v] + 1 < idx) {
+                invalid_range[inverse_map[v] + 1]++;
+                invalid_range[idx]--;
+            }
         }
 
         std::vector<std::uint32_t> result;
