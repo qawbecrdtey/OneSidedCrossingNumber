@@ -24,7 +24,7 @@ namespace oscm {
 
     /**
      * Check if two vertices \p i_ and \p j_ are not comparable.
-     * In other words, check fi there are no paths from \p i_ to \p j_ and \p j_ to \p i_.
+     * In other words, check if there are no paths from \p i_ to \p j_ and \p j_ to \p i_.
      * @param i_ a vertex.
      * @param j_ another vertex.
      * @param directed_edges_ underlying graph.
