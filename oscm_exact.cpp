@@ -49,8 +49,16 @@ int main(int argc, char *argv[]) {
 
     std::cout << "crossing_upper_bound: " << crossing_upper_bound << std::endl;
 
+    std::cout << "ordering prev:\n";
+    for(auto now : ordering) { std::cout << now << ' ';}
+    std::cout << std::endl;
+
     oscm::compute_ordering(nA, nB, connections, ordering, crossing_upper_bound);
     // oscm::compute_ordering_primary(nA, nB, connections, ordering, crossing_upper_bound);
+
+std::cout << "ordering post:\n";
+    for(auto now : ordering) { std::cout << now << ' ';}
+    std::cout << std::endl;
 
     std::cout
       << "current crossing count: " << oscm::count_crossings(nA, nB, ordering.data(), connections)

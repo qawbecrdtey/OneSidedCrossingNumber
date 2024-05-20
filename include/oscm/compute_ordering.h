@@ -19,14 +19,13 @@ namespace oscm {
       std::vector<std::uint32_t> &ordering_,
       std::uint64_t &crossing_upper_bound_);
 
-    void compute_ordering(
+    inline void compute_ordering(
       std::uint32_t const nA_,
       std::uint32_t const nB_,
       std::vector<std::pair<std::uint32_t, std::uint32_t>> const &connections_,
       std::vector<std::uint32_t> &ordering_,
       std::uint64_t &crossing_upper_bound_) {
         compute_ordering_inner(nA_, nB_, connections_, ordering_, crossing_upper_bound_);
-        for(auto &now: ordering_) { now += nA_; }
     }
 
     void compute_ordering_inner(
@@ -49,12 +48,31 @@ namespace oscm {
         else if(fixed_points.size() == nB_ && crossing_number < crossing_upper_bound_) {
             crossing_upper_bound_ = crossing_number;
             ordering_ = std::move(topological_ordering);
+            for(auto &now: ordering_) { now += nA_; }
             return;
         }
 
-        // TODO: check for each segment of fixed_points.
+// TODO: FIX BELOW.
 
-        assert(is_directed_acyclic(directed_edges));
+        std::cout << "directed_edges:\n";
+        for(std::uint32_t i = 0; i < nB_; i++) {
+            std::cout << ' ' << i << ":\t";
+            for(auto next: directed_edges[i]) { std::cout << next << ' '; }
+            std::cout << '\n';
+        }
+        std::cout << std::endl;
+
+        std::cout << "fixed_points:\n";
+        for(auto now: fixed_points) { std::cout << now << ' '; }
+        std::cout << std::endl;
+
+        std::cout << "topological_ordering:\n";
+        for(auto now: topological_ordering) { std::cout << now << ' '; }
+        std::cout << std::endl;
+
+        std::cerr << "If you see this message, then something has gone wrong." << std::endl;
+        assert(false);
+        __builtin_unreachable();
     }
 }  // namespace oscm
 
