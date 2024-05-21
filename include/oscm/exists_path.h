@@ -2,6 +2,7 @@
 #define ONESIDEDCROSSINGNUMBER_OSCM_EXISTS_PATH_H
 
 #include <cstdint>
+#include <memory>
 #include <vector>
 
 namespace oscm {
@@ -17,12 +18,16 @@ namespace oscm {
       std::uint32_t const j_,
       std::vector<std::vector<std::uint32_t>> const &directed_edges_) {
         if(i_ == j_) { return true; }
+        static auto visited = std::make_unique_for_overwrite<bool[]>(directed_edges_.size());
+        std::fill(visited.get(), visited.get() + directed_edges_.size(), false);
         std::vector<std::uint32_t> stack;
         stack.push_back(i_);
         while(!stack.empty()) {
             auto const now = stack.back();
+            visited[now] = true;
             stack.pop_back();
             for(auto const next: directed_edges_[now]) {
+                if(visited[next]) { continue; }
                 if(next == j_) { return true; }
                 stack.push_back(next);
             }

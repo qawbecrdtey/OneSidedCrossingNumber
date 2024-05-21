@@ -17,12 +17,12 @@ namespace oscm {
         for(auto const fixed_vertex: fixed_points_) {
             std::uint32_t j = l;
             while(topological_ordering_[j] != fixed_vertex) { j++; }
-            if(j - l == 2) { return {l, j}; }
-            if(j - l > 1) { result.emplace_back(l, j); }
+            if(l + 2 == j) { return {l, j}; }
+            else if(l + 2 < j) { result.emplace_back(l, j); }
             l = j + 1;
         }
-        if(topological_ordering_.size() - l > 1) {
-            if(topological_ordering_.size() - l == 2) { return {l, topological_ordering_.size()}; }
+        if(l + 2 == topological_ordering_.size()) { return {l, topological_ordering_.size()}; }
+        else if(l + 2 < topological_ordering_.size()) {
             result.emplace_back(l, topological_ordering_.size());
         }
 #if __has_cpp_attribute(assume)

@@ -19,7 +19,12 @@ namespace oscm {
             for(auto const v: vec) { in_deg[v]++; }
         }
 
-        std::vector<std::uint32_t> ordering_stack;
+        static std::vector<std::uint32_t> ordering_stack;
+        assert(ordering_stack.empty());
+#if __has_cpp_attribute(assume)
+        [[assume(ordering_stack.empty())]];
+#endif
+
         for(std::uint32_t i = 0; i < directed_edges_.size(); i++) {
             if(!in_deg[i]) { ordering_stack.push_back(i); }
         }

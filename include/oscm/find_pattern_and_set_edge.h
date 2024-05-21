@@ -1,6 +1,7 @@
 #ifndef ONESIDEDCROSSINGNUMBER_OSCM_FIND_PATTERN_AND_SET_EDGE_H
 #define ONESIDEDCROSSINGNUMBER_OSCM_FIND_PATTERN_AND_SET_EDGE_H
 
+#include <oscm/C_storage.h>
 #include <oscm/comp_second.h>
 #include <oscm/comparable.h>
 #include <oscm/count_crossings.h>
@@ -39,6 +40,7 @@ namespace oscm {
         for(std::uint32_t i = nA_; i != m; i++) {
             for(std::uint32_t j = i + 1; j != m; j++) {
                 if(equal_neighbor(i, j, connections_)) {
+                    C_set(i - nA_, j - nA_);
                     directed_edges_[i - nA_].push_back(j - nA_);
                     continue;
                 }
@@ -48,6 +50,8 @@ namespace oscm {
                 arr[0] = j;
                 arr[1] = i;
                 auto const Cji = count_crossings(nA_, 2, arr, connections_);
+                if(Cij < Cji) { C_set(i - nA_, j - nA_); }
+                else { C_set(j - nA_, i - nA_); }
                 assert(Cij || Cji);
 #if __has_cpp_attribute(assume)
                 [[assume(Cij || Cji)]];

@@ -1,4 +1,5 @@
 #include <oscm/bipartite_graph.h>
+#include <oscm/C_storage.h>
 #include <oscm/compute_ordering.h>
 // #include <oscm/compute_ordering_primary.h>
 #include <oscm/count_crossings.h>
@@ -39,6 +40,8 @@ int main(int argc, char *argv[]) {
     [[assume(nB > 0)]];
 #endif
 
+    oscm::C_initialize(nB);
+
     std::cout << "connections:\n";
     for(auto const &[u, v]: connections) { std::cout << u << ' ' << v << '\n'; }
     std::cout << std::endl;
@@ -50,14 +53,14 @@ int main(int argc, char *argv[]) {
     std::cout << "crossing_upper_bound: " << crossing_upper_bound << std::endl;
 
     std::cout << "ordering prev:\n";
-    for(auto const now : ordering) { std::cout << now << ' ';}
+    for(auto const now: ordering) { std::cout << now << ' '; }
     std::cout << std::endl;
 
     oscm::compute_ordering(nA, nB, connections, ordering, crossing_upper_bound);
     // oscm::compute_ordering_primary(nA, nB, connections, ordering, crossing_upper_bound);
 
     std::cout << "ordering post:\n";
-    for(auto const now : ordering) { std::cout << now << ' ';}
+    for(auto const now: ordering) { std::cout << now << ' '; }
     std::cout << std::endl;
 
     std::cout
