@@ -10,7 +10,7 @@
 #include <vector>
 
 namespace oscm {
-    inline std::uint64_t count_crossings(
+    __attribute__((always_inline)) inline std::uint64_t count_crossings(
       std::uint32_t const n1_,
       std::uint32_t const n2_,
       std::uint32_t const *const v2_,

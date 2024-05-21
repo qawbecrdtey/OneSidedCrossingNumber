@@ -13,9 +13,10 @@ namespace oscm {
      * @param i_ a vertex.
      * @param j_ another vertex.
      * @param directed_edges_ underlying graph.
-     * @return true if there is some path from \p i_ to \p j_ or from \p j_ to \p i_, false otherwise.
+     * @return true if there is some path from \p i_ to \p j_ or from \p j_ to \p i_, false
+     * otherwise.
      */
-    inline bool comparable(
+    __attribute__((always_inline)) inline bool comparable(
       std::uint32_t const i_,
       std::uint32_t const j_,
       std::vector<std::vector<std::uint32_t>> const &directed_edges_) {
@@ -28,9 +29,10 @@ namespace oscm {
      * @param i_ a vertex.
      * @param j_ another vertex.
      * @param directed_edges_ underlying graph.
-     * @return true if there is no path from \p i_ to \p j_ and from \p j_ to \p i_, false otherwise.
+     * @return true if there is no path from \p i_ to \p j_ and from \p j_ to \p i_, false
+     * otherwise.
      */
-    inline bool incomparable(
+    __attribute__((always_inline)) inline bool incomparable(
       std::uint32_t const i_,
       std::uint32_t const j_,
       std::vector<std::vector<std::uint32_t>> const &directed_edges_) {

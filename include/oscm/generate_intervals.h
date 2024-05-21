@@ -7,7 +7,8 @@
 #include <vector>
 
 namespace oscm {
-    inline std::vector<std::pair<std::uint32_t, std::uint32_t>> generate_intervals(
+    __attribute__((always_inline)) inline std::vector<std::pair<std::uint32_t, std::uint32_t>>
+    generate_intervals(
       std::vector<std::uint32_t> const &fixed_points_,
       std::vector<std::uint32_t> const &topological_ordering_) {
         static std::random_device rd;

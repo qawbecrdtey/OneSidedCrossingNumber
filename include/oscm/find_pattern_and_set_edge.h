@@ -25,13 +25,16 @@ namespace oscm {
      * @param directed_edges_ will be updated to contain directed edges from B to B, labeled as v -
      * nA_.
      */
-    inline void find_pattern_and_set_edge(
+    __attribute__((always_inline)) inline void find_pattern_and_set_edge(
       std::uint32_t const nA_,
       std::uint32_t const nB_,
       std::vector<std::pair<std::uint32_t, std::uint32_t>> const &connections_,
       std::vector<std::vector<std::uint32_t>> &directed_edges_) {
         assert(directed_edges_.size() == nB_);
         auto const m = nA_ + nB_;
+#if __has_cpp_attribute(assume)
+        [[assume(nA_ <= m && nB_ <= m)]];
+#endif
 
         for(std::uint32_t i = nA_; i != m; i++) {
             for(std::uint32_t j = i + 1; j != m; j++) {
@@ -92,8 +95,6 @@ namespace oscm {
                 }
             }
         }
-
-        // TODO: Implement RRLO2 reduction rule.
     }
 }  // namespace oscm
 

@@ -65,13 +65,14 @@ namespace oscm {
         return result;
     }
 
-    inline std::pair<std::vector<std::uint32_t>, std::vector<std::uint32_t>>
+    __attribute__((
+      always_inline)) inline std::pair<std::vector<std::uint32_t>, std::vector<std::uint32_t>>
     partial_order_fixed_points_with_topological_ordering(
       std::vector<std::vector<std::uint32_t>> const &directed_edges_) {
         assert(is_directed_acyclic(directed_edges_));
 
-        std::uint32_t const vertices_count = directed_edges_.size();
         auto topological_ordering = topological_sort(directed_edges_);
+        auto const vertices_count = static_cast<std::uint32_t>(directed_edges_.size());
         auto const inverse_map = std::make_unique_for_overwrite<std::uint32_t[]>(vertices_count);
 
         for(std::uint32_t i = 0; i < vertices_count; i++) {

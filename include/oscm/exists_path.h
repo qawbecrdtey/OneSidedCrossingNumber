@@ -12,7 +12,7 @@ namespace oscm {
      * @param directed_edges_ underlying graph.
      * @return true if there exists a path, false otherwise.
      */
-    inline bool exists_path(
+    __attribute__((always_inline)) inline bool exists_path(
       std::uint32_t const i_,
       std::uint32_t const j_,
       std::vector<std::vector<std::uint32_t>> const &directed_edges_) {

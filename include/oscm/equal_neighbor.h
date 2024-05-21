@@ -9,7 +9,7 @@
 #include <vector>
 
 namespace oscm {
-    inline bool equal_neighbor(
+    __attribute__((always_inline)) inline bool equal_neighbor(
       std::uint32_t const i_,
       std::uint32_t const j_,
       std::vector<std::pair<std::uint32_t, std::uint32_t>> const &connections_) {

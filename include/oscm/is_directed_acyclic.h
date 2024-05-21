@@ -24,7 +24,7 @@ namespace oscm {
         }
 
 #if __has_cpp_attribute(assume)
-    [[assume(ordering_stack.size() <= directed_edges_.size())]];
+        [[assume(ordering_stack.size() <= directed_edges_.size())]];
 #endif
 
         std::vector<std::uint32_t> result;

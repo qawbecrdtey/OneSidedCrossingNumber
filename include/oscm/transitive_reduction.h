@@ -10,7 +10,7 @@
 
 namespace oscm {
     [[nodiscard]]
-    inline std::vector<std::vector<std::uint32_t>>
+    __attribute__((always_inline)) inline std::vector<std::vector<std::uint32_t>>
     transitive_reduction(std::vector<std::vector<std::uint32_t>> &directed_edges_) {
         auto const topological_ordering = topological_sort(directed_edges_);
         std::vector<std::uint32_t> topological_ordering_inverse(directed_edges_.size());
@@ -46,7 +46,7 @@ namespace oscm {
     }
 
     [[nodiscard]]
-    inline std::vector<std::vector<std::uint32_t>>
+    __attribute__((always_inline)) inline std::vector<std::vector<std::uint32_t>>
     transitive_reduction(std::vector<std::vector<std::uint32_t>> directed_edges_) {
         auto const topological_ordering = topological_sort(directed_edges_);
         std::vector<std::uint32_t> topological_ordering_inverse(directed_edges_.size());
