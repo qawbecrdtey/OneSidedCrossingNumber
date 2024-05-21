@@ -16,13 +16,16 @@ namespace oscm {
       std::uint32_t const i_,
       std::uint32_t const j_,
       std::vector<std::vector<std::uint32_t>> const &directed_edges_) {
+        if(i_ == j_) { return true; }
         std::vector<std::uint32_t> stack;
         stack.push_back(i_);
         while(!stack.empty()) {
             auto const now = stack.back();
             stack.pop_back();
-            if(now == j_) { return true; }
-            for(auto const next: directed_edges_[now]) { stack.push_back(next); }
+            for(auto const next: directed_edges_[now]) {
+                if(next == j_) { return true; }
+                stack.push_back(next);
+            }
         }
         return false;
     }

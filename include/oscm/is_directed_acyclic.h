@@ -23,12 +23,19 @@ namespace oscm {
             if(!in_deg[i]) { ordering_stack.push_back(i); }
         }
 
+#if __has_cpp_attribute(assume)
+    [[assume(ordering_stack.size() <= directed_edges_.size())]];
+#endif
+
         std::vector<std::uint32_t> result;
         result.reserve(directed_edges_.size());
         while(!ordering_stack.empty()) {
             result.push_back(ordering_stack.back());
             ordering_stack.pop_back();
             for(auto const next: directed_edges_[result.back()]) {
+#if __has_cpp_attribute(assume)
+                [[assume(in_deg[next] > 0)]];
+#endif
                 if(--in_deg[next]) { continue; }
                 ordering_stack.push_back(next);
             }

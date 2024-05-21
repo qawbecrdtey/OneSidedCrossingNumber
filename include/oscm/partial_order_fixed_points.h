@@ -10,7 +10,6 @@
 #include <vector>
 
 namespace oscm {
-    // TODO: Fix.
     inline std::vector<std::uint32_t>  // vector of vertices
     partial_order_fixed_points(std::vector<std::vector<std::uint32_t>> const &directed_edges_) {
         assert(is_directed_acyclic(directed_edges_));
@@ -33,7 +32,7 @@ namespace oscm {
                     idx = static_cast<std::int32_t>(inverse_map[next]);
                 }
             }
-            if(idx + 1 < inverse_map[v]) {
+            if(idx + 1 < static_cast<std::int32_t>(inverse_map[v])) {
                 invalid_range[idx + 1]++;
                 invalid_range[inverse_map[v]]--;
             }
@@ -44,7 +43,7 @@ namespace oscm {
                     idx = static_cast<std::int32_t>(inverse_map[next]);
                 }
             }
-            if(inverse_map[v] + 1 < idx) {
+            if(static_cast<std::int32_t>(inverse_map[v] + 1) < idx) {
                 invalid_range[inverse_map[v] + 1]++;
                 invalid_range[idx]--;
             }
@@ -58,12 +57,14 @@ namespace oscm {
             if(!sum) { result.push_back(topological_ordering[i]); }
         }
 
-        assert(result.size() != directed_edges_.size() - 1);
+        assert(result.size() != vertices_count - 1);
+#if __has_cpp_attribute(assume)
+        [[assume(result.size() != vertices_count - 1)]];
+#endif
 
         return result;
     }
 
-    // TODO: Fix.
     inline std::pair<std::vector<std::uint32_t>, std::vector<std::uint32_t>>
     partial_order_fixed_points_with_topological_ordering(
       std::vector<std::vector<std::uint32_t>> const &directed_edges_) {
@@ -87,7 +88,7 @@ namespace oscm {
                     idx = static_cast<std::int32_t>(inverse_map[next]);
                 }
             }
-            if(idx + 1 < inverse_map[v]) {
+            if(idx + 1 < static_cast<std::int32_t>(inverse_map[v])) {
                 invalid_range[idx + 1]++;
                 invalid_range[inverse_map[v]]--;
             }
@@ -98,7 +99,7 @@ namespace oscm {
                     idx = static_cast<std::int32_t>(inverse_map[next]);
                 }
             }
-            if(inverse_map[v] + 1 < idx) {
+            if(static_cast<std::int32_t>(inverse_map[v] + 1) < idx) {
                 invalid_range[inverse_map[v] + 1]++;
                 invalid_range[idx]--;
             }
@@ -112,7 +113,10 @@ namespace oscm {
             if(!sum) { result.push_back(topological_ordering[i]); }
         }
 
-        assert(result.size() != directed_edges_.size() - 1);
+        assert(result.size() != vertices_count - 1);
+#if __has_cpp_attribute(assume)
+        [[assume(result.size() != vertices_count - 1)]];
+#endif
 
         return {std::move(result), std::move(topological_ordering)};
     }

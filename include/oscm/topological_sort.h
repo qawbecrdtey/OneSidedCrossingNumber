@@ -36,6 +36,9 @@ namespace oscm {
         }
 
         assert(result.size() == directed_edges_.size());
+#if __has_cpp_attribute(assume)
+        [[assume(result.size() == directed_edges_.size())]];
+#endif
 
         return result;
     }

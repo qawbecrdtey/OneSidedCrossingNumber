@@ -6,8 +6,8 @@
 
 namespace oscm {
     inline bool comp_second(
-      std::pair<std::uint32_t, std::uint32_t> const a_,
-      std::pair<std::uint32_t, std::uint32_t> const b_) {
+      std::pair<std::uint32_t, std::uint32_t> const &a_,
+      std::pair<std::uint32_t, std::uint32_t> const &b_) noexcept {
         return a_.second < b_.second;
     }
 }  // namespace oscm

@@ -52,7 +52,7 @@ namespace oscm {
           std::uint64_t const *data_,
           std::uint32_t const tidx_,
           std::uint32_t const lo_,
-          std::uint32_t const hi_) const {
+          std::uint32_t const hi_) const noexcept {
             if(lo_ == hi_) {
                 _tree[tidx_] = data_[lo_];
                 return;

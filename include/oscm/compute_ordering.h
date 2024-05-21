@@ -2,7 +2,9 @@
 #define ONESIDEDCROSSINGNUMBER_OSCM_COMPUTE_ORDERING_H
 
 #include <oscm/find_pattern_and_set_edge.h>
+#include <oscm/generate_intervals.h>
 #include <oscm/is_directed_acyclic.h>
+#include <oscm/obtain_random_interval.h>
 #include <oscm/partial_order_fixed_points.h>
 #include <oscm/topological_sort.h>
 #include <oscm/transitive_reduction.h>
@@ -29,8 +31,17 @@ namespace oscm {
         std::vector<std::vector<std::uint32_t>> directed_edges(nB_);
         find_pattern_and_set_edge(nA_, nB_, connections_, directed_edges);
 
+        for(auto &now: ordering_) {
+#if __has_cpp_attribute(assume)
+            [[assume(now >= nA_)]];
+#endif
+            now -= nA_;
+        }
+
         compute_ordering_inner(
           nA_, nB_, connections_, directed_edges, ordering_, crossing_upper_bound_);
+
+        for(auto &now: ordering_) { now += nA_; }
     }
 
     inline void compute_ordering_inner(
@@ -49,48 +60,32 @@ namespace oscm {
             return;
         }
         else if(fixed_points.size() == nB_) {
-            if(crossing_number < crossing_upper_bound_) {
+            if(crossing_number != crossing_upper_bound_) {
+#if __has_cpp_attribute(assume)
+                [[assume(crossing_number < crossing_upper_bound_)]];
+#endif
                 crossing_upper_bound_ = crossing_number;
                 ordering_ = std::move(topological_ordering);
-                for(auto &now: ordering_) { now += nA_; }
             }
             return;
         }
 
         auto next_directed_edges = transitive_reduction(directed_edges_);
 
-        std::uint32_t l = 0;
-        for(auto const fixed_vertex: fixed_points) {
-            std::uint32_t j;
-            for(j = l; topological_ordering[j] != fixed_vertex; j++) {
-                for(std::uint32_t k = j + 1; topological_ordering[k] != fixed_vertex; k++) {
-                    if(incomparable(
-                         topological_ordering[j], topological_ordering[k], directed_edges_)) {
-                        next_directed_edges[topological_ordering[j]].push_back(
-                          topological_ordering[k]);
-                        compute_ordering_inner(
-                          nA_, nB_, connections_, next_directed_edges, ordering_, crossing_upper_bound_);
-
-                        next_directed_edges[topological_ordering[j]].pop_back();
-                        next_directed_edges[topological_ordering[k]].push_back(
-                          topological_ordering[j]);
-                        compute_ordering_inner(
-                          nA_, nB_, connections_, next_directed_edges, ordering_, crossing_upper_bound_);
-                        return;
-                    }
-                }
-            }
-            l = j + 1;
-        }
-        for(std::uint32_t j = l; j < topological_ordering.size(); j++) {
-            for(std::uint32_t k = j + 1; k < topological_ordering.size(); k++) {
-                if(incomparable(topological_ordering[j], topological_ordering[k], directed_edges_)) {
-                    next_directed_edges[topological_ordering[j]].push_back(topological_ordering[k]);
+        // auto const intervals = generate_intervals(fixed_points, topological_ordering);
+        auto const [left, right] = obtain_random_interval(fixed_points, topological_ordering);
+        for(std::uint32_t j = left; j < right - 1; j++) {
+            for(std::uint32_t k = 1; k < right - j; k++) {
+                if(incomparable(
+                      topological_ordering[j], topological_ordering[j + k], next_directed_edges)) {
+                    next_directed_edges[topological_ordering[j]].push_back(
+                      topological_ordering[j + k]);
                     compute_ordering_inner(
                       nA_, nB_, connections_, next_directed_edges, ordering_, crossing_upper_bound_);
 
                     next_directed_edges[topological_ordering[j]].pop_back();
-                    next_directed_edges[topological_ordering[k]].push_back(topological_ordering[j]);
+                    next_directed_edges[topological_ordering[j + k]].push_back(
+                      topological_ordering[j]);
                     compute_ordering_inner(
                       nA_, nB_, connections_, next_directed_edges, ordering_, crossing_upper_bound_);
                     return;
@@ -100,7 +95,11 @@ namespace oscm {
 
         std::cerr << "If you see this message, then something has gone wrong." << std::endl;
         assert(false);
+#if __cplusplus >= 202302L
+        std::unreachable();
+#else
         __builtin_unreachable();
+#endif
     }
 }  // namespace oscm
 
