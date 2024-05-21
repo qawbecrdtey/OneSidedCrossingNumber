@@ -10,7 +10,8 @@
 #include <vector>
 
 namespace oscm {
-    std::vector<std::uint32_t>  // vector of vertices
+    // TODO: Fix.
+    inline std::vector<std::uint32_t>  // vector of vertices
     partial_order_fixed_points(std::vector<std::vector<std::uint32_t>> const &directed_edges_) {
         assert(is_directed_acyclic(directed_edges_));
 
@@ -22,22 +23,26 @@ namespace oscm {
             inverse_map[topological_ordering[i]] = i;
         }
 
-        auto const reversed_direced_edges = reverse_directed_edges(directed_edges_);
+        auto const reversed_directed_edges = reverse_directed_edges(directed_edges_);
         auto const invalid_range = std::make_unique<std::int32_t[]>(vertices_count + 1);
 
         for(std::uint32_t v = 0; v < vertices_count; v++) {  // index of vertex
-            std::uint32_t idx = 0;  // index of topological_ordering
-            for(auto const next: reversed_direced_edges[v]) {
-                if(idx < inverse_map[next]) { idx = inverse_map[next]; }
+            std::int32_t idx = -1;  // index of topological_ordering
+            for(auto const next: reversed_directed_edges[v]) {
+                if(idx < static_cast<std::int32_t>(inverse_map[next])) {
+                    idx = static_cast<std::int32_t>(inverse_map[next]);
+                }
             }
             if(idx + 1 < inverse_map[v]) {
                 invalid_range[idx + 1]++;
                 invalid_range[inverse_map[v]]--;
             }
 
-            idx = vertices_count;
+            idx = static_cast<std::int32_t>(vertices_count);
             for(auto const next: directed_edges_[v]) {
-                if(idx > inverse_map[next]) { idx = inverse_map[next]; }
+                if(idx > static_cast<std::int32_t>(inverse_map[next])) {
+                    idx = static_cast<std::int32_t>(inverse_map[next]);
+                }
             }
             if(inverse_map[v] + 1 < idx) {
                 invalid_range[inverse_map[v] + 1]++;
@@ -53,9 +58,12 @@ namespace oscm {
             if(!sum) { result.push_back(topological_ordering[i]); }
         }
 
+        assert(result.size() != directed_edges_.size() - 1);
+
         return result;
     }
 
+    // TODO: Fix.
     inline std::pair<std::vector<std::uint32_t>, std::vector<std::uint32_t>>
     partial_order_fixed_points_with_topological_ordering(
       std::vector<std::vector<std::uint32_t>> const &directed_edges_) {
@@ -69,22 +77,26 @@ namespace oscm {
             inverse_map[topological_ordering[i]] = i;
         }
 
-        auto const reversed_direced_edges = reverse_directed_edges(directed_edges_);
+        auto const reversed_directed_edges = reverse_directed_edges(directed_edges_);
         auto const invalid_range = std::make_unique<std::int32_t[]>(vertices_count + 1);
 
         for(std::uint32_t v = 0; v < vertices_count; v++) {  // index of vertex
-            std::uint32_t idx = 0;  // index of topological_ordering
-            for(auto const next: reversed_direced_edges[v]) {
-                if(idx < inverse_map[next]) { idx = inverse_map[next]; }
+            std::int32_t idx = -1;  // index of topological_ordering
+            for(auto const next: reversed_directed_edges[v]) {
+                if(idx < static_cast<std::int32_t>(inverse_map[next])) {
+                    idx = static_cast<std::int32_t>(inverse_map[next]);
+                }
             }
             if(idx + 1 < inverse_map[v]) {
                 invalid_range[idx + 1]++;
                 invalid_range[inverse_map[v]]--;
             }
 
-            idx = vertices_count;
+            idx = static_cast<std::int32_t>(vertices_count);
             for(auto const next: directed_edges_[v]) {
-                if(idx > inverse_map[next]) { idx = inverse_map[next]; }
+                if(idx > static_cast<std::int32_t>(inverse_map[next])) {
+                    idx = static_cast<std::int32_t>(inverse_map[next]);
+                }
             }
             if(inverse_map[v] + 1 < idx) {
                 invalid_range[inverse_map[v] + 1]++;
@@ -99,6 +111,8 @@ namespace oscm {
             sum += invalid_range[i];
             if(!sum) { result.push_back(topological_ordering[i]); }
         }
+
+        assert(result.size() != directed_edges_.size() - 1);
 
         return {std::move(result), std::move(topological_ordering)};
     }

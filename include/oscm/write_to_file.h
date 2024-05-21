@@ -7,7 +7,7 @@
 #include <vector>
 
 namespace oscm {
-    void write_to_file(char const output_file_name_[], std::vector<std::uint32_t> const &ordering_) {
+    inline void write_to_file(char const output_file_name_[], std::vector<std::uint32_t> const &ordering_) {
         std::ofstream ofs(output_file_name_);
         if(!ofs) {
             std::cerr << "Failed to open file of filename. Printing result to stdout." << std::endl;

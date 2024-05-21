@@ -16,8 +16,8 @@ namespace oscm {
      * @return true if there is some path from \p i_ to \p j_ or from \p j_ to \p i_, false otherwise.
      */
     inline bool comparable(
-      std::uint32_t i_,
-      std::uint32_t j_,
+      std::uint32_t const i_,
+      std::uint32_t const j_,
       std::vector<std::vector<std::uint32_t>> const &directed_edges_) {
         return exists_path(i_, j_, directed_edges_) || exists_path(j_, i_, directed_edges_);
     }
@@ -31,8 +31,8 @@ namespace oscm {
      * @return true if there is no path from \p i_ to \p j_ and from \p j_ to \p i_, false otherwise.
      */
     inline bool incomparable(
-      std::uint32_t i_,
-      std::uint32_t j_,
+      std::uint32_t const i_,
+      std::uint32_t const j_,
       std::vector<std::vector<std::uint32_t>> const &directed_edges_) {
         return !comparable(i_, j_, directed_edges_);
     }

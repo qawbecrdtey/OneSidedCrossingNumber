@@ -10,12 +10,12 @@
 #include <vector>
 
 namespace oscm {
-    std::uint64_t count_crossings(
+    inline std::uint64_t count_crossings(
       std::uint32_t const n1_,
       std::uint32_t const n2_,
       std::uint32_t const *const v2_,
       std::vector<std::pair<std::uint32_t, std::uint32_t>> const &connections_) {
-        segment_tree tree(n1_);
+        segment_tree const tree(n1_);
         std::uint64_t res = 0;
         std::uint32_t idx = 0;
         while(idx < n2_) {

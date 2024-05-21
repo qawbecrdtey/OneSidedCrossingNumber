@@ -17,8 +17,8 @@ namespace oscm {
      * @return true if \p i_ and \p j_ are dependent, false otherwise.
      */
     inline bool dependent(
-      std::uint32_t i_,
-      std::uint32_t j_,
+      std::uint32_t const i_,
+      std::uint32_t const j_,
       std::vector<std::vector<std::uint32_t>> const &directed_edges_) {
         for(std::uint32_t i = 0; i < directed_edges_.size(); i++) {
             if(incomparable(i, i_, directed_edges_) || incomparable(i, j_, directed_edges_)) {

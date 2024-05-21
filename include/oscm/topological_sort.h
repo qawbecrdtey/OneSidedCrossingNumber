@@ -12,7 +12,7 @@ namespace oscm {
      * @param directed_edges_ There is a directed edge from u to v if v is in directed_edges_[u].
      * @return One possible configuration of topological sort.
      */
-    std::vector<std::uint32_t>
+    inline std::vector<std::uint32_t>
     topological_sort(std::vector<std::vector<std::uint32_t>> const &directed_edges_) {
         auto const in_deg = std::make_unique<std::uint32_t[]>(directed_edges_.size());
         for(auto const &vec: directed_edges_) {

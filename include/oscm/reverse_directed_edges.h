@@ -6,7 +6,7 @@
 #include <vector>
 
 namespace oscm {
-    std::vector<std::vector<std::uint32_t>>
+    inline std::vector<std::vector<std::uint32_t>>
     reverse_directed_edges(std::vector<std::vector<std::uint32_t>> const &directed_edges_) {
         std::vector<std::vector<std::uint32_t>> result(directed_edges_.size());
         for(std::uint32_t i = 0; i < directed_edges_.size(); i++) {

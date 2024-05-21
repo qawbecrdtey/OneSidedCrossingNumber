@@ -1,6 +1,6 @@
 #include <oscm/bipartite_graph.h>
 #include <oscm/compute_ordering.h>
-#include <oscm/compute_ordering_primary.h>
+// #include <oscm/compute_ordering_primary.h>
 #include <oscm/count_crossings.h>
 #include <oscm/read_from_file.h>
 #include <oscm/segment_tree.h>

@@ -11,8 +11,8 @@ namespace oscm {
     class bipartite_graph {
     public:
         explicit bipartite_graph(
-          std::uint32_t nA_,
-          std::uint32_t nB_,
+          std::uint32_t const nA_,
+          std::uint32_t const nB_,
           std::vector<std::pair<std::uint32_t, std::uint32_t>> edges_)
          : _vertices_A_count(nA_),
            _vertices_B_count(nB_),
@@ -27,8 +27,8 @@ namespace oscm {
         }
 
         explicit bipartite_graph(
-          std::uint32_t nA_,
-          std::uint32_t nB_,
+          std::uint32_t const nA_,
+          std::uint32_t const nB_,
           std::unique_ptr<std::uint32_t[]> vA_,
           std::unique_ptr<std::uint32_t[]> vB_,
           std::vector<std::pair<std::uint32_t, std::uint32_t>> edges_)

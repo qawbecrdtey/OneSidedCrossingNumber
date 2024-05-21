@@ -12,7 +12,7 @@ namespace oscm {
      * @param directed_edges_ Edges of a directed graph.
      * @return true if it detects a cycle, false otherwise.
      */
-    bool is_directed_acyclic(std::vector<std::vector<std::uint32_t>> const &directed_edges_) {
+    inline bool is_directed_acyclic(std::vector<std::vector<std::uint32_t>> const &directed_edges_) {
         auto const in_deg = std::make_unique<std::uint32_t[]>(directed_edges_.size());
         for(auto const &vec: directed_edges_) {
             for(auto const v: vec) { in_deg[v]++; }

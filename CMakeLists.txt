@@ -9,7 +9,7 @@ target_include_directories(OneSidedCrossingNumber PRIVATE ${CMAKE_CURRENT_SOURCE
 target_compile_options(OneSidedCrossingNumber PRIVATE -Wall -Wextra)
 
 if(CMAKE_BUILD_TYPE EQUAL "Release")
-    target_compile_options(OneSidedCrossingNumber PRIVATE -O2 -DNDEBUG)
+    target_compile_options(OneSidedCrossingNumber PRIVATE -O2 -DNDEBUG -march=native)
 endif()
 
 if(NO_COMMENTS)

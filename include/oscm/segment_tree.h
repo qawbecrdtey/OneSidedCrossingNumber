@@ -8,11 +8,11 @@
 namespace oscm {
     class segment_tree {
     public:
-        explicit segment_tree(std::size_t size_)
+        explicit segment_tree(std::uint32_t const size_)
          : _tree(std::make_unique<std::uint64_t[]>(size_ << 2)),
            _size(size_) {}
 
-        explicit segment_tree(std::size_t size_, std::uint64_t const *data_)
+        explicit segment_tree(std::uint32_t const size_, std::uint64_t const *const data_)
          : _tree(std::make_unique_for_overwrite<std::uint64_t[]>(size_ << 2)),
            _size(size_) {
             reset(data_);
@@ -23,7 +23,7 @@ namespace oscm {
             return _size;
         }
 
-        void reset() const { std::fill(_tree.get(), _tree.get() + (_size << 2), 0); }
+        void reset() const { std::fill_n(_tree.get(), _size << 2, 0); }
 
         void reset(std::uint64_t const *const data_) const { reset(data_, 1, 1, _size); }
 

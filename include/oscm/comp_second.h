@@ -5,9 +5,9 @@
 #include <utility>
 
 namespace oscm {
-    bool comp_second(
-      std::pair<std::uint32_t, std::uint32_t> a_,
-      std::pair<std::uint32_t, std::uint32_t> b_) {
+    inline bool comp_second(
+      std::pair<std::uint32_t, std::uint32_t> const a_,
+      std::pair<std::uint32_t, std::uint32_t> const b_) {
         return a_.second < b_.second;
     }
 }  // namespace oscm

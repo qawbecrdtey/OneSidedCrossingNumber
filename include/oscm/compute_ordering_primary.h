@@ -14,7 +14,7 @@
 #include <vector>
 
 namespace oscm {
-    void compute_ordering_primary(
+    inline void compute_ordering_primary(
       std::uint32_t const nA_,
       std::uint32_t const nB_,
       std::vector<std::pair<std::uint32_t, std::uint32_t>> const &connections_,
