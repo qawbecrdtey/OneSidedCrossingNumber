@@ -1,7 +1,6 @@
 #ifndef ONESIDEDCROSSINGNUMBER_OSCM_IS_DIRECTED_ACYCLIC_H
 #define ONESIDEDCROSSINGNUMBER_OSCM_IS_DIRECTED_ACYCLIC_H
 
-#include <algorithm>
 #include <cstdint>
 #include <memory>
 #include <vector>

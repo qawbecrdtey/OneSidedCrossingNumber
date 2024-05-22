@@ -16,7 +16,7 @@ namespace oscm {
      * @param directed_edges_ underlying graph.
      * @return true if \p i_ and \p j_ are dependent, false otherwise.
      */
-    inline bool dependent(
+    __attribute__((always_inline)) inline bool dependent(
       std::uint32_t const i_,
       std::uint32_t const j_,
       std::vector<std::vector<std::uint32_t>> const &directed_edges_) {

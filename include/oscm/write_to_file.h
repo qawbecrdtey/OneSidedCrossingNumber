@@ -7,7 +7,7 @@
 #include <vector>
 
 namespace oscm {
-    __attribute__((always_inline)) inline void
+    inline void
     write_to_file(char const output_file_name_[], std::vector<std::uint32_t> const &ordering_) {
         std::ofstream ofs(output_file_name_);
         if(!ofs) {

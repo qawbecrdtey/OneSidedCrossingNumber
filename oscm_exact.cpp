@@ -1,12 +1,10 @@
-#include <oscm/bipartite_graph.h>
 #include <oscm/C_storage.h>
 #include <oscm/compute_ordering.h>
-// #include <oscm/compute_ordering_primary.h>
 #include <oscm/count_crossings.h>
 #include <oscm/read_from_file.h>
-#include <oscm/segment_tree.h>
 #include <oscm/write_to_file.h>
 
+#include <chrono>
 #include <cstdint>
 #include <iostream>
 #include <vector>
@@ -42,13 +40,22 @@ int main(int argc, char *argv[]) {
 
     oscm::C_initialize(nB);
 
+#if DEBUG_MESSAGE
+
     std::cout << "connections:\n";
     for(auto const &[u, v]: connections) { std::cout << u << ' ' << v << '\n'; }
     std::cout << std::endl;
 
+#endif
+
     std::vector<std::uint32_t> ordering(nB);
     std::iota(ordering.begin(), ordering.end(), nA);
     std::uint64_t crossing_upper_bound = oscm::count_crossings(nA, nB, ordering.data(), connections);
+
+    // Thanks, constraint!
+    if(crossing_upper_bound > 300 * (nA + nB)) { crossing_upper_bound = 300 * (nA + nB); }
+
+#if DEBUG_MESSAGE
 
     std::cout << "crossing_upper_bound: " << crossing_upper_bound << std::endl;
 
@@ -56,8 +63,23 @@ int main(int argc, char *argv[]) {
     for(auto const now: ordering) { std::cout << now << ' '; }
     std::cout << std::endl;
 
+#endif
+
+#if ENABLE_TIMER
+    auto const start = std::chrono::system_clock::now();
+#endif
+
     oscm::compute_ordering(nA, nB, connections, ordering, crossing_upper_bound);
     // oscm::compute_ordering_primary(nA, nB, connections, ordering, crossing_upper_bound);
+
+#if ENABLE_TIMER
+    auto const end = std::chrono::system_clock::now();
+    std::cout
+      << "Elapsed time: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start)
+      << '\n';
+#endif
+
+#if DEBUG_MESSAGE
 
     std::cout << "ordering post:\n";
     for(auto const now: ordering) { std::cout << now << ' '; }
@@ -66,6 +88,8 @@ int main(int argc, char *argv[]) {
     std::cout
       << "current crossing count: " << oscm::count_crossings(nA, nB, ordering.data(), connections)
       << '\n';
+
+#endif
 
     oscm::write_to_file(argv[2], ordering);
 }

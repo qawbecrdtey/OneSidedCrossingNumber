@@ -26,7 +26,7 @@ namespace oscm {
      * @param directed_edges_ will be updated to contain directed edges from B to B, labeled as v -
      * nA_.
      */
-    __attribute__((always_inline)) inline void find_pattern_and_set_edge(
+    __attribute__((flatten)) inline void find_pattern_and_set_edge(
       std::uint32_t const nA_,
       std::uint32_t const nB_,
       std::vector<std::pair<std::uint32_t, std::uint32_t>> const &connections_,

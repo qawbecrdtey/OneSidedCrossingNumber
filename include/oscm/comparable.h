@@ -32,7 +32,7 @@ namespace oscm {
      * @return true if there is no path from \p i_ to \p j_ and from \p j_ to \p i_, false
      * otherwise.
      */
-    __attribute__((always_inline)) inline bool incomparable(
+    __attribute__((always_inline, flatten)) inline bool incomparable(
       std::uint32_t const i_,
       std::uint32_t const j_,
       std::vector<std::vector<std::uint32_t>> const &directed_edges_) {

@@ -12,7 +12,7 @@
 #include <vector>
 
 namespace oscm {
-    __attribute__((always_inline)) inline void read_from_file(
+    inline void read_from_file(
       char const input_file_name_[],
       std::uint32_t &nA_,
       std::uint32_t &nB_,

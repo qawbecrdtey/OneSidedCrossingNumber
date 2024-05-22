@@ -7,8 +7,8 @@
 #include <random>
 
 namespace oscm {
-    __attribute__((always_inline)) inline std::uint32_t
-    random_unsigned_integer(std::uint32_t lo, std::uint32_t hi) {
+    __attribute__((always_inline, flatten)) inline std::uint32_t
+    random_unsigned_integer(std::uint32_t const lo, std::uint32_t const hi) {
         std::uniform_int_distribution<std::uint32_t> dist(lo, hi);
         return dist(random_generator());
     }

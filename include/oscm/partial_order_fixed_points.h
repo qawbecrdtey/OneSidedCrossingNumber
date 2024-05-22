@@ -7,10 +7,11 @@
 
 #include <cassert>
 #include <memory>
+#include <tuple>
 #include <vector>
 
 namespace oscm {
-    inline std::vector<std::uint32_t>  // vector of vertices
+    __attribute__((flatten)) inline std::vector<std::uint32_t>  // vector of vertices
     partial_order_fixed_points(std::vector<std::vector<std::uint32_t>> const &directed_edges_) {
         assert(is_directed_acyclic(directed_edges_));
 
@@ -65,15 +66,15 @@ namespace oscm {
         return result;
     }
 
-    __attribute__((
-      always_inline)) inline std::pair<std::vector<std::uint32_t>, std::vector<std::uint32_t>>
-    partial_order_fixed_points_with_topological_ordering(
-      std::vector<std::vector<std::uint32_t>> const &directed_edges_) {
+    __attribute__((flatten)) inline std::
+      tuple<std::vector<std::uint32_t>, std::vector<std::uint32_t>, std::unique_ptr<std::uint32_t[]>>
+      partial_order_fixed_points_with_topological_ordering(
+        std::vector<std::vector<std::uint32_t>> const &directed_edges_) {
         assert(is_directed_acyclic(directed_edges_));
 
         auto topological_ordering = topological_sort(directed_edges_);
         auto const vertices_count = static_cast<std::uint32_t>(directed_edges_.size());
-        auto const inverse_map = std::make_unique_for_overwrite<std::uint32_t[]>(vertices_count);
+        auto inverse_map = std::make_unique_for_overwrite<std::uint32_t[]>(vertices_count);
 
         for(std::uint32_t i = 0; i < vertices_count; i++) {
             inverse_map[topological_ordering[i]] = i;
@@ -119,7 +120,11 @@ namespace oscm {
         [[assume(result.size() != vertices_count - 1)]];
 #endif
 
-        return {std::move(result), std::move(topological_ordering)};
+        return std::make_tuple<
+          std::vector<std::uint32_t>,
+          std::vector<std::uint32_t>,
+          std::unique_ptr<std::uint32_t[]>>(
+          std::move(result), std::move(topological_ordering), std::move(inverse_map));
     }
 }  // namespace oscm
 
