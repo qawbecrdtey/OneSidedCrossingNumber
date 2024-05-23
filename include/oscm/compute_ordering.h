@@ -95,7 +95,9 @@ namespace oscm {
         // auto next_directed_edges = transitive_reduction(
         //   directed_edges_, topological_ordering, std::move(topological_ordering_inverse));
 
-        auto const [left, right] = obtain_random_interval(fixed_points, topological_ordering);
+        // auto const [left, right] = obtain_random_interval(fixed_points, topological_ordering);
+        auto const [left, right] = obtain_random_interval_with_high_priority_on_longer_interval(
+          fixed_points, topological_ordering);
 
         assert(left + 2 <= right);
 #if __has_cpp_attribute(assume)
