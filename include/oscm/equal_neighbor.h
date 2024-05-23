@@ -13,8 +13,7 @@ namespace oscm {
       std::uint32_t const i_,
       std::uint32_t const j_,
       std::vector<std::pair<std::uint32_t, std::uint32_t>> const &connections_) {
-        static std::unordered_set<std::uint32_t> set;
-        set.clear();
+        std::unordered_set<std::uint32_t> set;
 
         auto lo_i = std::lower_bound(
           connections_.begin(), connections_.end(), std::make_pair(0u, i_), comp_second);

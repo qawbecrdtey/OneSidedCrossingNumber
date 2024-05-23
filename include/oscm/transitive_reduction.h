@@ -9,7 +9,8 @@
 
 namespace oscm {
     [[nodiscard]]
-    __attribute__((flatten)) inline std::vector<std::vector<std::uint32_t>> transitive_reduction(
+    __attribute__((always_inline, flatten)) inline std::vector<std::vector<std::uint32_t>>
+    transitive_reduction(
       std::vector<std::vector<std::uint32_t>> &directed_edges_,
       std::vector<std::uint32_t> const &topological_ordering_,
       std::unique_ptr<std::uint32_t[]> topological_ordering_inverse_) {
@@ -18,7 +19,7 @@ namespace oscm {
         std::fill_n(set_union.get(), N * N, false);
         for(std::uint64_t i = 0; i < N * N; i += N + 1) { set_union[i] = true; }
 
-        std::vector<std::vector<std::uint32_t>> result(directed_edges_.size());
+        std::vector<std::vector<std::uint32_t>> result(N);
         for(auto const now: std::ranges::reverse_view(topological_ordering_)) {
             // TODO: should be optimized.
             std::sort(
@@ -40,6 +41,19 @@ namespace oscm {
         }
 
         return result;
+    }
+
+    [[nodiscard]]
+    __attribute__((flatten)) inline std::vector<std::vector<std::uint32_t>> transitive_reduction(
+      std::vector<std::vector<std::uint32_t>> &directed_edges_,
+      std::vector<std::uint32_t> const &topological_ordering_) {
+        auto topological_ordering_inverse =
+          std::make_unique_for_overwrite<std::uint32_t[]>(topological_ordering_.size());
+        for(std::uint32_t i = 0; i < topological_ordering_.size(); i++) {
+            topological_ordering_inverse[topological_ordering_[i]] = i;
+        }
+        return transitive_reduction(
+          directed_edges_, topological_ordering_, std::move(topological_ordering_inverse));
     }
 }  // namespace oscm
 

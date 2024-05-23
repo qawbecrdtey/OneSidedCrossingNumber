@@ -98,3 +98,4 @@ int main(int argc, char *argv[]) {
 
 // References:
 // [1] Fixed parameter algorithms for ONE-SIDED CROSSING MINIMIZATION revisited
+// [2] A Fast and Simple Subexponential Fixed Parameter Algorithm for One-Sided Crossing Minimization

@@ -8,7 +8,7 @@
 
 namespace oscm {
     template<std::uint32_t N>
-    inline bool exists_reverse_path(
+    bool exists_reverse_path(
       std::uint32_t const *const arr_,
       std::uint32_t const nA_,
       std::vector<std::vector<std::uint32_t>> const &directed_edges_) {

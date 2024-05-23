@@ -3,10 +3,10 @@
 
 #include <oscm/C_storage.h>
 #include <oscm/comp_second.h>
-#include <oscm/comparable.h>
 #include <oscm/count_crossings.h>
-#include <oscm/dependent.h>
+#include <oscm/custom_pattern.h>
 #include <oscm/equal_neighbor.h>
+#include <oscm/isolated.h>
 
 #include <algorithm>
 #include <cassert>
@@ -37,8 +37,23 @@ namespace oscm {
         [[assume(nA_ <= m && nB_ <= m)]];
 #endif
 
+        std::unordered_set<std::uint32_t> isolated_set;
+
         for(std::uint32_t i = nA_; i != m; i++) {
+            if(isolated(i, connections_)) {
+                for(std::uint32_t j = nA_; j != i; j++) {
+                    if(isolated_set.contains(j)) { continue; }
+                    C_set(i - nA_, j - nA_);
+                }
+                for(std::uint32_t j = i + 1; j != m; j++) { C_set(i - nA_, j - nA_); }
+                isolated_set.insert(i);
+            }
+        }
+
+        for(std::uint32_t i = nA_; i != m; i++) {
+            if(isolated_set.contains(i)) { continue; }
             for(std::uint32_t j = i + 1; j != m; j++) {
+                if(isolated_set.contains(j)) { continue; }
                 if(equal_neighbor(i, j, connections_)) {
                     C_set(i - nA_, j - nA_);
                     directed_edges_[i - nA_].push_back(j - nA_);
@@ -56,6 +71,16 @@ namespace oscm {
 #if __has_cpp_attribute(assume)
                 [[assume(Cij || Cji)]];
 #endif
+
+                if(std::any result; custom_pattern<0>(i, j, connections_, result)) {
+                    if(std::any_cast<bool>(result)) {  // i -> j
+                        directed_edges_[i - nA_].push_back(j - nA_);
+                    }
+                    else {  // j -> i
+                        directed_edges_[j - nA_].push_back(i - nA_);
+                    }
+                    continue;
+                }
 
                 if(!Cij) {
                     directed_edges_[i - nA_].push_back(j - nA_);

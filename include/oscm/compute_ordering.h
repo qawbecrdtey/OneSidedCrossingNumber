@@ -3,6 +3,7 @@
 
 #include <oscm/C_storage.h>
 #include <oscm/brute_force_ordering.h>
+#include <oscm/comparable.h>
 #include <oscm/exists_path.h>
 #include <oscm/find_pattern_and_set_edge.h>
 #include <oscm/obtain_random_interval.h>
@@ -32,6 +33,15 @@ namespace oscm {
       std::uint64_t &crossing_upper_bound_) {
         std::vector<std::vector<std::uint32_t>> directed_edges(nB_);
         find_pattern_and_set_edge(nA_, nB_, connections_, directed_edges);
+
+        auto new_ordering = topological_sort(directed_edges);
+        directed_edges = transitive_reduction(directed_edges, new_ordering);
+        for(auto &now: new_ordering) { now += nA_; }
+        if(auto const new_crossings = count_crossings(nA_, nB_, new_ordering.data(), connections_);
+           new_crossings < crossing_upper_bound_) {
+            crossing_upper_bound_ = new_crossings;
+            ordering_ = std::move(new_ordering);
+        }
 
         for(auto &now: ordering_) {
 #if __has_cpp_attribute(assume)
@@ -75,8 +85,15 @@ namespace oscm {
 
         for(auto &now: fixed_points) { now -= nA_; }
 
-        auto next_directed_edges = transitive_reduction(
-          directed_edges_, topological_ordering, std::move(topological_ordering_inverse));
+        std::vector<std::vector<std::uint32_t>> next_directed_edges;
+        if(!random_unsigned_integer(0, nA_ + nB_)) {
+            next_directed_edges = transitive_reduction(
+              directed_edges_, topological_ordering, std::move(topological_ordering_inverse));
+        }
+        else { next_directed_edges = std::move(directed_edges_); }
+
+        // auto next_directed_edges = transitive_reduction(
+        //   directed_edges_, topological_ordering, std::move(topological_ordering_inverse));
 
         auto const [left, right] = obtain_random_interval(fixed_points, topological_ordering);
 
@@ -138,9 +155,9 @@ namespace oscm {
             // Up to case 2k + 1 -> piv's range is [left + k + 1, right - k - 1].
         default: {
             // 1.
-            // auto const piv = random_unsigned_integer(
-            //   left + (brute_force_constant >> 1) + (brute_force_constant & 1),
-            //   right - (brute_force_constant >> 1) - 1);
+            auto const piv = random_unsigned_integer(
+              left + (brute_force_constant >> 1) + (brute_force_constant & 1),
+              right - (brute_force_constant >> 1) - 1);
 
             // 2.
             // std::uint32_t piv;
@@ -164,7 +181,7 @@ namespace oscm {
             //   random_unsigned_integer(0, 1) ? ((3 * left + right) >> 2) : ((left + right) >> 1);
 
             // 5.
-            auto const piv = left + 6;
+            // auto const piv = left + 6;
 
             assert(left <= piv && piv < right);
             for(std::uint32_t i = left; i < right; i++) {
