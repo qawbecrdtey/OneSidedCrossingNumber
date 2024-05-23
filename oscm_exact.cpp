@@ -1,3 +1,5 @@
+inline constexpr unsigned int brute_force_constant = 6;
+
 #include <oscm/C_storage.h>
 #include <oscm/compute_ordering.h>
 #include <oscm/count_crossings.h>

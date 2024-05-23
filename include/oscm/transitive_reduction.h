@@ -9,8 +9,7 @@
 
 namespace oscm {
     [[nodiscard]]
-    __attribute__((flatten)) inline std::vector<std::vector<std::uint32_t>>
-    transitive_reduction(
+    __attribute__((flatten)) inline std::vector<std::vector<std::uint32_t>> transitive_reduction(
       std::vector<std::vector<std::uint32_t>> &directed_edges_,
       std::vector<std::uint32_t> const &topological_ordering_,
       std::unique_ptr<std::uint32_t[]> topological_ordering_inverse_) {

@@ -3,6 +3,7 @@
 
 #include <cassert>
 #include <cstdint>
+#include <limits>
 #include <memory>
 
 namespace oscm {

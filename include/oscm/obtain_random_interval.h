@@ -17,19 +17,34 @@ namespace oscm {
         for(auto const fixed_vertex: fixed_points_) {
             std::uint32_t j = l;
             while(topological_ordering_[j] != fixed_vertex) { j++; }
-            if(l + 2 == j) { return {l, j}; }
-            if(l + 2 < j) { result.emplace_back(l, j); }
+            // if(l + 2 == j) { return {l, j}; }
+            // if(l + 2 < j) { result.emplace_back(l, j); }
+            if(l + 2 <= j && j <= l + brute_force_constant) { return {l, j}; }
+            if(l + brute_force_constant < j) { result.emplace_back(l, j); }
             l = j + 1;
         }
-        if(l + 2 == topological_ordering_.size()) { return {l, topological_ordering_.size()}; }
-        if(l + 2 < topological_ordering_.size()) {
+        // if(l + 2 == topological_ordering_.size()) { return {l, topological_ordering_.size()}; }
+        // if(l + 2 < topological_ordering_.size()) {
+        //     result.emplace_back(l, topological_ordering_.size());
+        // }
+        if(
+          l + 2 <= topological_ordering_.size()
+          && topological_ordering_.size() <= l + brute_force_constant) {
+            return {l, topological_ordering_.size()};
+        }
+        if(l + brute_force_constant < topological_ordering_.size()) {
             result.emplace_back(l, topological_ordering_.size());
         }
 #if __has_cpp_attribute(assume)
         [[assume(!result.empty())]];
 #endif
+        // 1.
+        // return result[random_unsigned_integer(0, result.size() - 1)];
 
-        return result[random_unsigned_integer(0, result.size() - 1)];
+        // 2.
+        return *std::min_element(result.begin(), result.end(), [](auto const &a_, auto const &b_) {
+            return a_.second - a_.first < b_.second - b_.first;
+        });
     }
 }  // namespace oscm
 

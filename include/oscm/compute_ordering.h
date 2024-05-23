@@ -2,6 +2,8 @@
 #define ONESIDEDCROSSINGNUMBER_OSCM_COMPUTE_ORDERING_H
 
 #include <oscm/C_storage.h>
+#include <oscm/brute_force_ordering.h>
+#include <oscm/exists_path.h>
 #include <oscm/find_pattern_and_set_edge.h>
 #include <oscm/obtain_random_interval.h>
 #include <oscm/partial_order_fixed_points.h>
@@ -79,8 +81,11 @@ namespace oscm {
         auto const [left, right] = obtain_random_interval(fixed_points, topological_ordering);
 
         assert(left + 2 <= right);
-
-        if(right - left == 2) {  // Apply RRLO2 reduction rule.
+#if __has_cpp_attribute(assume)
+        [[assume(right - left >= 2)]];
+#endif
+        switch(right - left) {
+        case 2: {
             assert(incomparable(
               topological_ordering[left], topological_ordering[left + 1], next_directed_edges));
             bool const b = C_get(topological_ordering[left], topological_ordering[left + 1]);
@@ -88,65 +93,131 @@ namespace oscm {
               topological_ordering[left + b]);
             compute_ordering_inner(
               nA_, nB_, connections_, std::move(next_directed_edges), ordering_, crossing_upper_bound_);
-            return;
-        }
+        } break;
+        case 3: {
+            brute_force_ordering<3>(
+              next_directed_edges, connections_, topological_ordering, nA_, left);
+            compute_ordering_inner(
+              nA_, nB_, connections_, std::move(next_directed_edges), ordering_, crossing_upper_bound_);
+        } break;
+        case 4: {
+            brute_force_ordering<4>(
+              next_directed_edges, connections_, topological_ordering, nA_, left);
+            compute_ordering_inner(
+              nA_, nB_, connections_, std::move(next_directed_edges), ordering_, crossing_upper_bound_);
+        } break;
+        case 5: {
+            brute_force_ordering<5>(
+              next_directed_edges, connections_, topological_ordering, nA_, left);
+            compute_ordering_inner(
+              nA_, nB_, connections_, std::move(next_directed_edges), ordering_, crossing_upper_bound_);
+        } break;
+        case 6: {
+            brute_force_ordering<6>(
+              next_directed_edges, connections_, topological_ordering, nA_, left);
+            compute_ordering_inner(
+              nA_, nB_, connections_, std::move(next_directed_edges), ordering_, crossing_upper_bound_);
+        } break;
+            // case 7: {
+            //     brute_force_ordering<7>(
+            //       next_directed_edges, connections_, topological_ordering, nA_, left);
+            //     compute_ordering_inner(
+            //       nA_, nB_, connections_, std::move(next_directed_edges), ordering_,
+            //       crossing_upper_bound_);
+            // } break;
+            // case 8: {
+            //     brute_force_ordering<8>(
+            //       next_directed_edges, connections_, topological_ordering, nA_, left);
+            //     compute_ordering_inner(
+            //       nA_, nB_, connections_, std::move(next_directed_edges), ordering_,
+            //       crossing_upper_bound_);
+            // } break;
 
-        auto const piv = random_unsigned_integer(left + 1, right - 2);
-        assert(left <= piv && piv < right);
-        for(std::uint32_t i = left; i < right; i++) {
-            if(incomparable(topological_ordering[piv], topological_ordering[i], next_directed_edges)) {
-                auto const l = topological_ordering[piv];
-                auto const r = topological_ordering[i];
+            // Cases up to brute_force_constant defined in the main cpp file.
+            // Up to case 2k -> piv's range is [left + k, right - k - 1].
+            // Up to case 2k + 1 -> piv's range is [left + k + 1, right - k - 1].
+        default: {
+            // 1.
+            // auto const piv = random_unsigned_integer(
+            //   left + (brute_force_constant >> 1) + (brute_force_constant & 1),
+            //   right - (brute_force_constant >> 1) - 1);
 
-                for(auto &now: topological_ordering) { now += nA_; }
+            // 2.
+            // std::uint32_t piv;
+            // switch(random_unsigned_integer(1, 3)) {
+            // case 1: piv = (3 * left + right) >> 2; break;
+            // case 2: piv = (left + right) >> 1; break;
+            // case 3: piv = (left + 3 * right) >> 2; break;
+            // default:
+            // #if __cplusplus >= 202'302L
+            //     std::unreachable();
+            // #else
+            //     __builtin_unreachable();
+            // #endif
+            // }
 
-                if(auto const current_crossing =
-                     count_crossings(nA_, nB_, topological_ordering.data(), connections_);
-                   crossing_upper_bound_ > current_crossing) {
-                    crossing_upper_bound_ = current_crossing;
-                    ordering_ = topological_ordering;
+            // 3.
+            // auto const piv = (left + right) >> 1;
+
+            // 4.
+            // auto const piv =
+            //   random_unsigned_integer(0, 1) ? ((3 * left + right) >> 2) : ((left + right) >> 1);
+
+            // 5.
+            auto const piv = left + 6;
+
+            assert(left <= piv && piv < right);
+            for(std::uint32_t i = left; i < right; i++) {
+                if(incomparable(
+                     topological_ordering[piv], topological_ordering[i], next_directed_edges)) {
+                    auto const l = topological_ordering[piv];
+                    auto const r = topological_ordering[i];
+
+                    for(auto &now: topological_ordering) { now += nA_; }
+
+                    if(auto const current_crossing =
+                         count_crossings(nA_, nB_, topological_ordering.data(), connections_);
+                       crossing_upper_bound_ > current_crossing) {
+                        crossing_upper_bound_ = current_crossing;
+                        for(auto &now: topological_ordering) { now -= nA_; }
+                        ordering_ = topological_ordering;
+                    }
+
+                    if(C_get(l, r)) {
+                        next_directed_edges[l].push_back(r);
+                        compute_ordering_inner(
+                          nA_, nB_, connections_, next_directed_edges, ordering_, crossing_upper_bound_);
+
+                        next_directed_edges[l].pop_back();
+                        next_directed_edges[r].push_back(l);
+                        compute_ordering_inner(
+                          nA_,
+                          nB_,
+                          connections_,
+                          std::move(next_directed_edges),
+                          ordering_,
+                          crossing_upper_bound_);
+                    }
+                    else {
+                        next_directed_edges[r].push_back(l);
+                        compute_ordering_inner(
+                          nA_, nB_, connections_, next_directed_edges, ordering_, crossing_upper_bound_);
+
+                        next_directed_edges[r].pop_back();
+                        next_directed_edges[l].push_back(r);
+                        compute_ordering_inner(
+                          nA_,
+                          nB_,
+                          connections_,
+                          std::move(next_directed_edges),
+                          ordering_,
+                          crossing_upper_bound_);
+                    }
+                    return;
                 }
-
-                if(C_get(l, r)) {
-                    next_directed_edges[l].push_back(r);
-                    compute_ordering_inner(
-                      nA_, nB_, connections_, next_directed_edges, ordering_, crossing_upper_bound_);
-
-                    next_directed_edges[l].pop_back();
-                    next_directed_edges[r].push_back(l);
-                    compute_ordering_inner(
-                      nA_,
-                      nB_,
-                      connections_,
-                      std::move(next_directed_edges),
-                      ordering_,
-                      crossing_upper_bound_);
-                }
-                else {
-                    next_directed_edges[r].push_back(l);
-                    compute_ordering_inner(
-                      nA_, nB_, connections_, next_directed_edges, ordering_, crossing_upper_bound_);
-
-                    next_directed_edges[r].pop_back();
-                    next_directed_edges[l].push_back(r);
-                    compute_ordering_inner(
-                      nA_,
-                      nB_,
-                      connections_,
-                      std::move(next_directed_edges),
-                      ordering_,
-                      crossing_upper_bound_);
-                }
-                return;
             }
+        } break;
         }
-
-        assert(false);
-#if __cplusplus >= 202'302L
-        std::unreachable();
-#else
-        __builtin_unreachable();
-#endif
     }
 }  // namespace oscm
 
