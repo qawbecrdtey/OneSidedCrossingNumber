@@ -1,6 +1,3 @@
-inline constexpr unsigned int brute_force_constant = 6;
-
-#include <oscm/C_storage.h>
 #include <oscm/compute_ordering.h>
 #include <oscm/count_crossings.h>
 #include <oscm/read_from_file.h>
@@ -39,8 +36,6 @@ int main(int argc, char *argv[]) {
     [[assume(nA > 0)]];
     [[assume(nB > 0)]];
 #endif
-
-    oscm::C_initialize(nB);
 
 #if DEBUG_MESSAGE
 

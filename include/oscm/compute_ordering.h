@@ -1,7 +1,6 @@
 #ifndef ONESIDEDCROSSINGNUMBER_OSCM_COMPUTE_ORDERING_H
 #define ONESIDEDCROSSINGNUMBER_OSCM_COMPUTE_ORDERING_H
 
-#include <oscm/C_storage.h>
 #include <oscm/brute_force_ordering.h>
 #include <oscm/comparable.h>
 #include <oscm/exists_path.h>
@@ -100,8 +99,10 @@ namespace oscm {
         // auto next_directed_edges = transitive_reduction(
         //   directed_edges_, topological_ordering, std::move(topological_ordering_inverse));
 
-        // auto const [left, right] = obtain_random_interval(fixed_points, topological_ordering);
-        auto const [left, right] = obtain_random_interval_with_high_priority_on_longer_interval(
+        // auto const [left, right] =
+        // obtain_random_interval_with_high_priority_on_shorter_interval(fixed_points,
+        // topological_ordering);
+        auto const [left, right] = obtain_random_interval_with_high_priority_on_first_interval(
           fixed_points, topological_ordering);
 
         assert(left + 2 <= right);
@@ -113,9 +114,8 @@ namespace oscm {
         case 2: {
             assert(incomparable(
               topological_ordering[left], topological_ordering[left + 1], next_directed_edges));
-            bool const b = C_get(topological_ordering[left], topological_ordering[left + 1]);
-            next_directed_edges[topological_ordering[left + !b]].push_back(
-              topological_ordering[left + b]);
+            brute_force_ordering<2>(
+              next_directed_edges, connections_, topological_ordering, nA_, left);
             release_vector_memory(topological_ordering);
             compute_ordering_inner(
               nA_, nB_, connections_, std::move(next_directed_edges), ordering_, crossing_upper_bound_);
@@ -169,20 +169,9 @@ namespace oscm {
             // Up to case 2k -> piv's range is [left + k, right - k - 1].
             // Up to case 2k + 1 -> piv's range is [left + k + 1, right - k - 1].
 
-            // TODO: Try the following.
-            // Iterate through every vertex u in a chosen range.
-            // If there is no v in the range which v -> u,
-            // then let u to satsify u -> v for every v != u in the range, and do the branching.
-
         default: {
-
-        } break;
-
-        /* default: {
             // 1.
-            auto const piv = random_unsigned_integer(
-              left + (brute_force_constant >> 1) + (brute_force_constant & 1),
-              right - (brute_force_constant >> 1) - 1);
+            auto const piv = random_unsigned_integer(left + 3, right - 4);
 
             // 2.
             // std::uint32_t piv;
@@ -228,41 +217,24 @@ namespace oscm {
                         ordering_ = std::move(topological_ordering);
                     }
                     else { release_vector_memory(topological_ordering); }
+                    next_directed_edges[l].push_back(r);
+                    compute_ordering_inner(
+                      nA_, nB_, connections_, next_directed_edges, ordering_, crossing_upper_bound_);
 
-                    if(C_get(l, r)) {
-                        next_directed_edges[l].push_back(r);
-                        compute_ordering_inner(
-                          nA_, nB_, connections_, next_directed_edges, ordering_, crossing_upper_bound_);
+                    next_directed_edges[l].pop_back();
+                    next_directed_edges[r].push_back(l);
+                    compute_ordering_inner(
+                      nA_,
+                      nB_,
+                      connections_,
+                      std::move(next_directed_edges),
+                      ordering_,
+                      crossing_upper_bound_);
 
-                        next_directed_edges[l].pop_back();
-                        next_directed_edges[r].push_back(l);
-                        compute_ordering_inner(
-                          nA_,
-                          nB_,
-                          connections_,
-                          std::move(next_directed_edges),
-                          ordering_,
-                          crossing_upper_bound_);
-                    }
-                    else {
-                        next_directed_edges[r].push_back(l);
-                        compute_ordering_inner(
-                          nA_, nB_, connections_, next_directed_edges, ordering_, crossing_upper_bound_);
-
-                        next_directed_edges[r].pop_back();
-                        next_directed_edges[l].push_back(r);
-                        compute_ordering_inner(
-                          nA_,
-                          nB_,
-                          connections_,
-                          std::move(next_directed_edges),
-                          ordering_,
-                          crossing_upper_bound_);
-                    }
                     return;
                 }
             }
-        } break; */
+        } break;
         }
     }
 }  // namespace oscm

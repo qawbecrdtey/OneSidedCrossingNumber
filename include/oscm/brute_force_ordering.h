@@ -11,7 +11,7 @@
 
 namespace oscm {
     template<std::uint32_t N>
-    inline void brute_force_ordering(
+    void brute_force_ordering(
       std::vector<std::vector<std::uint32_t>> &directed_edges_,
       std::vector<std::pair<std::uint32_t, std::uint32_t>> const &connections_,
       std::vector<std::uint32_t> const &topological_ordering_,

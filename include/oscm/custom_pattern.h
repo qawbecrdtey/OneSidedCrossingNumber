@@ -1,8 +1,6 @@
 #ifndef ONESIDEDCROSSINGNUMBER_OSCM_CUSTOM_PATTERN_H
 #define ONESIDEDCROSSINGNUMBER_OSCM_CUSTOM_PATTERN_H
 
-#include <oscm/C_storage.h>
-
 #include <algorithm>
 #include <any>
 #include <cstdint>
