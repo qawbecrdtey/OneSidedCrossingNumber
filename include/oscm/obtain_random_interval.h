@@ -43,6 +43,10 @@ namespace oscm {
 
         // 2.
         return *std::min_element(result.begin(), result.end(), [](auto const &a_, auto const &b_) {
+#if __has_cpp_attribute(assume)
+            [[assume(a_.first <= a_.second)]];
+            [[assume(b_.first <= b_.second)]];
+#endif
             return a_.second - a_.first < b_.second - b_.first;
         });
     }

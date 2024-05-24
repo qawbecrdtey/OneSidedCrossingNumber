@@ -72,7 +72,8 @@ namespace oscm {
                 [[assume(Cij || Cji)]];
 #endif
 
-                if(std::any result; custom_pattern<0>(i, j, connections_, result)) {
+                if(std::any result;
+                   custom_pattern<1>(nA_, nB_, i, j, Cij, Cji, connections_, result)) {
                     if(std::any_cast<bool>(result)) {  // i -> j
                         directed_edges_[i - nA_].push_back(j - nA_);
                     }
