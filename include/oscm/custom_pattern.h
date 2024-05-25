@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <any>
 #include <cstdint>
+#include <iostream>
 #include <map>
 #include <memory>
 #include <utility>
@@ -21,7 +22,7 @@ namespace oscm {
      *   - result_ is true if a -> b, false if b -> a.
      *
      * - N = 1
-     *   - Check the pattern
+     *   - Check all patterns like RR3
      *   - result type: bool
      *   - result_ is true if a -> b, false if b -> a.
      *
@@ -147,7 +148,6 @@ namespace oscm {
 
                 if(Ai + Aj < Bi + Bj) { i_to_j = true; }
                 else if(Bi + Bj < Ai + Aj) { j_to_i = true; }
-
                 if(i_to_j && j_to_i) { return false; }
 
                 for(auto const val: it->second) {
@@ -162,12 +162,14 @@ namespace oscm {
                 if(it->first + 1 != next_it->first) {
                     if(Ai + Aj < Bi + Bj) { i_to_j = true; }
                     else if(Bi + Bj < Ai + Aj) { j_to_i = true; }
-
                     if(i_to_j && j_to_i) { return false; }
                 }
 
                 it = next_it;
             }
+#if DEBUG_MESSAGE
+            std::cout << "Found pattern " << i_ << (i_to_j ? " -> " : " <- ") << j_ << std::endl;
+#endif
             result_ = i_to_j;
             return true;
         }

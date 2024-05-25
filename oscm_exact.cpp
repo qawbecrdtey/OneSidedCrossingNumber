@@ -49,9 +49,6 @@ int main(int argc, char *argv[]) {
     std::iota(ordering.begin(), ordering.end(), nA);
     std::uint64_t crossing_upper_bound = oscm::count_crossings(nA, nB, ordering.data(), connections);
 
-    // Thanks, constraint!
-    if(crossing_upper_bound > 300 * (nA + nB)) { crossing_upper_bound = 300 * (nA + nB); }
-
 #if DEBUG_MESSAGE
 
     std::cout << "crossing_upper_bound: " << crossing_upper_bound << std::endl;
@@ -67,7 +64,6 @@ int main(int argc, char *argv[]) {
 #endif
 
     oscm::compute_ordering(nA, nB, connections, ordering, crossing_upper_bound);
-    // oscm::compute_ordering_primary(nA, nB, connections, ordering, crossing_upper_bound);
 
 #if ENABLE_TIMER
     auto const end = std::chrono::system_clock::now();

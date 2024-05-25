@@ -9,6 +9,9 @@
 namespace oscm {
     __attribute__((always_inline, flatten)) inline std::uint32_t
     random_unsigned_integer(std::uint32_t const lo, std::uint32_t const hi) {
+#if __has_cpp_attribute(assume)
+        [[assume(lo <= hi)]];
+#endif
         std::uniform_int_distribution<std::uint32_t> dist(lo, hi);
         return dist(random_generator());
     }

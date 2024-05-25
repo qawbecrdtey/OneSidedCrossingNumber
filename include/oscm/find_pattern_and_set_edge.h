@@ -42,10 +42,10 @@ namespace oscm {
             if(isolated(i, connections_)) {
                 for(std::uint32_t j = nA_; j != i; j++) {
                     if(isolated_set.contains(j)) { continue; }
-                    directed_edges_[i - nA_].push_back(j - nA_);
+                    directed_edges_[j - nA_].push_back(i - nA_);
                 }
                 for(std::uint32_t j = i + 1; j != m; j++) {
-                    directed_edges_[i - nA_].push_back(j - nA_);
+                    directed_edges_[j - nA_].push_back(i - nA_);
                 }
                 isolated_set.insert(i);
             }

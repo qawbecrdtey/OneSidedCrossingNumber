@@ -21,6 +21,9 @@ namespace oscm {
               connections_.begin(), connections_.end(), std::make_pair(0u, v2_[i]), comp_second);
             auto const hi = std::upper_bound(
               connections_.begin(), connections_.end(), std::make_pair(0u, v2_[i]), comp_second);
+#if __has_cpp_attribute(assume)
+            [[assume(lo <= hi)]];
+#endif
             while(lo < hi) {
                 res += tree.sum(lo->first + 1, n1_);
                 tree.update_increment(lo->first, 1);
