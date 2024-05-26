@@ -1,9 +1,17 @@
 cmake_minimum_required(VERSION 3.27)
 project(OneSidedCrossingNumber)
 
+option(DEFAULT "Run with the default configuration. Defaults to ON." ON)
 option(NO_COMMENTS "Assume there are no comments in the input file. Slight improvement in performance during input phase. Defaults to OFF." OFF)
 option(DEBUG_MESSAGE "Prints debugging message. Defaults to OFF." OFF)
 option(ENABLE_TIMER "Enables internal timing for the main operation. Defaults to OFF." OFF)
+
+if(DEFAULT EQUAL ON)
+    set(NO_COMMENTS ON)
+    set(DEBUG_MESSAGE OFF)
+    set(ENABLE_TIMER OFF)
+    set(CMAKE_BUILD_TYPE "Release")
+endif()
 
 add_executable(OneSidedCrossingNumber oscm_exact.cpp)
 set_target_properties(OneSidedCrossingNumber PROPERTIES CXX_STANDARD 26)

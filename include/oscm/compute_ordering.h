@@ -14,6 +14,7 @@
 
 #include <algorithm>
 #include <cstdint>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 
@@ -29,9 +30,10 @@ namespace oscm {
     void compute_ordering_inner_improved(
       std::uint32_t nA_,
       std::uint32_t nB_,
+      std::uint32_t const *B_,
       std::vector<std::pair<std::uint32_t, std::uint32_t>> const &connections_,
       std::vector<std::vector<std::uint32_t>> directed_edges_,
-      std::vector<std::uint32_t> &ordering_,
+      std::uint32_t *const ordering_,
       std::uint64_t &crossing_upper_bound_);
 
     inline void compute_ordering(
@@ -43,7 +45,8 @@ namespace oscm {
         std::vector<std::vector<std::uint32_t>> directed_edges(nB_);
         find_pattern_and_set_edge(nA_, nB_, connections_, directed_edges);
 
-        auto new_ordering = topological_sort_degree_prioritized(nA_, nB_, directed_edges, connections_);
+        auto new_ordering =
+          topological_sort_degree_prioritized(nA_, nB_, directed_edges, connections_);
         directed_edges = transitive_reduction(directed_edges, new_ordering);
 
 #if DEBUG_MESSAGE
@@ -75,6 +78,59 @@ namespace oscm {
 
         compute_ordering_inner(
           nA_, nB_, connections_, directed_edges, ordering_, crossing_upper_bound_);
+
+        for(auto &now: ordering_) { now += nA_; }
+    }
+
+    inline void compute_ordering_improved(
+      std::uint32_t const nA_,
+      std::uint32_t const nB_,
+      std::vector<std::pair<std::uint32_t, std::uint32_t>> const &connections_,
+      std::vector<std::uint32_t> &ordering_,
+      std::uint64_t &crossing_upper_bound_) {
+        std::vector<std::vector<std::uint32_t>> directed_edges(nB_);
+        find_pattern_and_set_edge(nA_, nB_, connections_, directed_edges);
+        auto new_ordering =
+          topological_sort_degree_prioritized(nA_, nB_, directed_edges, connections_);
+        directed_edges = transitive_reduction(directed_edges, new_ordering);
+
+#if DEBUG_MESSAGE
+        std::cout << "One topological ordering after finding patterns:\n";
+        for(auto const now: new_ordering) { std::cout << now + nA_ << ' '; }
+        std::cout << std::endl;
+#endif
+
+        for(auto &now: new_ordering) { now += nA_; }
+        if(auto const new_crossings = count_crossings(nA_, nB_, new_ordering.data(), connections_);
+           new_crossings < crossing_upper_bound_) {
+            crossing_upper_bound_ = new_crossings;
+            ordering_ = std::move(new_ordering);
+        }
+        else { release_vector_memory(new_ordering); }
+
+#if DEBUG_MESSAGE
+        std::cout << "Resulting initial ordering:\n";
+        for(auto const now: ordering_) { std::cout << now << ' '; }
+        std::cout << "\nResulting initial crossing_upper_bound: " << crossing_upper_bound_ << '\n';
+#endif
+
+        for(auto &now: ordering_) {
+#if __has_cpp_attribute(assume)
+            [[assume(now >= nA_)]];
+#endif
+            now -= nA_;
+        }
+
+        auto const B = std::make_unique_for_overwrite<std::uint32_t[]>(nB_);
+        std::iota(B.get(), B.get() + nB_, 0);
+        compute_ordering_inner_improved(
+          nA_,
+          nB_,
+          B.get(),
+          connections_,
+          std::move(directed_edges),
+          ordering_.data(),
+          crossing_upper_bound_);
 
         for(auto &now: ordering_) { now += nA_; }
     }
@@ -292,14 +348,52 @@ namespace oscm {
         }
     }
 
+
+    // TODO: Fix below.
+    /**
+     *
+     * @param nA_
+     * @param nB_
+     * @param B_ an array of length \p nB_ . Works as a map from (0, \p nB_ - 1) to vertices
+     * represented as integers from 0 to \p nB_-nA_-1 .
+     * @param connections_
+     * @param directed_edges_ underlying graph.
+     * @param ordering_
+     * @param crossing_upper_bound_
+     */
     void compute_ordering_inner_improved(
-      std::uint32_t nA_,
-      std::uint32_t nB_,
+      std::uint32_t const nA_,
+      std::uint32_t const nB_,
+      std::uint32_t const *const B_,
       std::vector<std::pair<std::uint32_t, std::uint32_t>> const &connections_,
       std::vector<std::vector<std::uint32_t>> directed_edges_,
-      std::vector<std::uint32_t> &ordering_,
+      std::uint32_t *const ordering_,
       std::uint64_t &crossing_upper_bound_) {
-        // TODO: Make an improved version of it using divide and conquer.
+        std::unordered_map<std::uint32_t, std::uint32_t> map_from_vertices_to_B;
+        for(std::uint32_t i = 0; i < nB_; i++) { map_from_vertices_to_B[B_[i]] = i; }
+
+        auto [fixed_points, topological_ordering, topological_ordering_inverse] =
+          partial_order_fixed_points_with_topological_ordering(
+            nB_, B_, map_from_vertices_to_B, directed_edges_);
+
+        for(auto &now: fixed_points) { now += nA_; }
+
+        if(auto const crossing_number =
+             count_crossings(nA_, fixed_points.size(), fixed_points.data(), connections_);
+           crossing_number >= crossing_upper_bound_) {
+            return;
+        }
+        else if(fixed_points.size() == nB_) {
+            assert(crossing_number < crossing_upper_bound_);
+#if __has_cpp_attribute(assume)
+            [[assume(crossing_number < crossing_upper_bound_)]];
+#endif
+            crossing_upper_bound_ = crossing_number;
+            std::copy(topological_ordering.begin(), topological_ordering.end(), ordering_);
+            return;
+        }
+
+        for(auto &now: fixed_points) { now -= nA_; }
     }
 }  // namespace oscm
 
