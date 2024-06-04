@@ -1,5 +1,5 @@
-#ifndef ONESIDEDCROSSINGNUMBER_OSCM_SEGMENT_TREE_H
-#define ONESIDEDCROSSINGNUMBER_OSCM_SEGMENT_TREE_H
+#ifndef OSCM_SEGMENT_TREE_H
+#define OSCM_SEGMENT_TREE_H
 
 #include <cassert>
 #include <cstdint>
@@ -150,4 +150,4 @@ namespace oscm {
     };
 }  // namespace oscm
 
-#endif  // ONESIDEDCROSSINGNUMBER_OSCM_SEGMENT_TREE_H
+#endif  // OSCM_SEGMENT_TREE_H

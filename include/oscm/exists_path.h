@@ -1,5 +1,5 @@
-#ifndef ONESIDEDCROSSINGNUMBER_OSCM_EXISTS_PATH_H
-#define ONESIDEDCROSSINGNUMBER_OSCM_EXISTS_PATH_H
+#ifndef OSCM_EXISTS_PATH_H
+#define OSCM_EXISTS_PATH_H
 
 #include <cstdint>
 #include <memory>
@@ -36,4 +36,4 @@ namespace oscm {
     }
 }  // namespace oscm
 
-#endif  // ONESIDEDCROSSINGNUMBER_OSCM_EXISTS_PATH_H
+#endif  // OSCM_EXISTS_PATH_H

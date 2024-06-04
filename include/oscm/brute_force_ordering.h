@@ -1,5 +1,5 @@
-#ifndef ONESIDEDCROSSINGNUMBER_OSCM_BRUTE_FORCE_ORDERING_H
-#define ONESIDEDCROSSINGNUMBER_OSCM_BRUTE_FORCE_ORDERING_H
+#ifndef OSCM_BRUTE_FORCE_ORDERING_H
+#define OSCM_BRUTE_FORCE_ORDERING_H
 
 #include <oscm/count_crossings.h>
 #include <oscm/exists_reverse_path.h>
@@ -37,4 +37,4 @@ namespace oscm {
     }
 }  // namespace oscm
 
-#endif  // ONESIDEDCROSSINGNUMBER_OSCM_BRUTE_FORCE_ORDERING_H
+#endif  // OSCM_BRUTE_FORCE_ORDERING_H

@@ -1,5 +1,5 @@
-#ifndef ONESIDEDCROSSINGNUMBER_OSCM_FIND_PATTERN_AND_SET_EDGE_H
-#define ONESIDEDCROSSINGNUMBER_OSCM_FIND_PATTERN_AND_SET_EDGE_H
+#ifndef OSCM_FIND_PATTERN_AND_SET_EDGE_H
+#define OSCM_FIND_PATTERN_AND_SET_EDGE_H
 
 #include <oscm/comp_second.h>
 #include <oscm/count_crossings.h>
@@ -126,4 +126,4 @@ namespace oscm {
     }
 }  // namespace oscm
 
-#endif  // ONESIDEDCROSSINGNUMBER_OSCM_FIND_PATTERN_AND_SET_EDGE_H
+#endif  // OSCM_FIND_PATTERN_AND_SET_EDGE_H

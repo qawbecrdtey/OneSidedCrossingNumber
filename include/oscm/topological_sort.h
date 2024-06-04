@@ -1,5 +1,5 @@
-#ifndef ONESIDEDCROSSINGNUMBER_OSCM_TOPOLOGICAL_SORT_H
-#define ONESIDEDCROSSINGNUMBER_OSCM_TOPOLOGICAL_SORT_H
+#ifndef OSCM_TOPOLOGICAL_SORT_H
+#define OSCM_TOPOLOGICAL_SORT_H
 
 #include <cassert>
 #include <cstdint>
@@ -112,7 +112,7 @@ namespace oscm {
       std::vector<std::pair<std::uint32_t, std::uint32_t>> const &connections_) {
         assert(nB_ == directed_edges_.size());
 #if __has_cpp_attribute(assume)
-        [[assume(B_ != nullptr)]];
+      [[assume(nB_ == directed_edges_.size())]];
 #endif
 
         auto const in_deg = std::make_unique<std::uint32_t[]>(directed_edges_.size());
@@ -219,4 +219,4 @@ namespace oscm {
     }
 }  // namespace oscm
 
-#endif  // ONESIDEDCROSSINGNUMBER_OSCM_TOPOLOGICAL_SORT_H
+#endif  // OSCM_TOPOLOGICAL_SORT_H

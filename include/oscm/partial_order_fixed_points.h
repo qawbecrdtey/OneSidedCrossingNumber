@@ -1,5 +1,5 @@
-#ifndef ONESIDEDCROSSINGNUMBER_OSCM_PARTIAL_ORDER_FIXED_POINTS_H
-#define ONESIDEDCROSSINGNUMBER_OSCM_PARTIAL_ORDER_FIXED_POINTS_H
+#ifndef OSCM_PARTIAL_ORDER_FIXED_POINTS_H
+#define OSCM_PARTIAL_ORDER_FIXED_POINTS_H
 
 #include <oscm/is_directed_acyclic.h>
 #include <oscm/reverse_directed_edges.h>
@@ -137,10 +137,10 @@ namespace oscm {
     /**
      * TODO: fill above.
      * @param directed_edges_ underlying graph.
-     * @param B an array of length \p nB_ . Works as a map from (0, \p nB_ - 1) to vertices
+     * @param B_ an array of length \p nB_ . Works as a map from (0, \p nB_ - 1) to vertices
      * represented as integers from 0 to \p nB_-nA_-1 .
      * @return a tuple (fixed_points, topological_ordering, topological_ordering_inverse) of \p
-     * directed_edges_.
+     * directed_edges_ .
      */
     __attribute__((always_inline, flatten)) inline std::
       tuple<std::vector<std::uint32_t>, std::vector<std::uint32_t>, std::unique_ptr<std::uint32_t[]>>
@@ -213,4 +213,4 @@ namespace oscm {
     }
 }  // namespace oscm
 
-#endif  // ONESIDEDCROSSINGNUMBER_OSCM_PARTIAL_ORDER_FIXED_POINTS_H
+#endif  // OSCM_PARTIAL_ORDER_FIXED_POINTS_H

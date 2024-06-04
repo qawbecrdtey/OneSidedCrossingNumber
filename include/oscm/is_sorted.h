@@ -1,5 +1,5 @@
-#ifndef ONESIDEDCROSSINGNUMBER_OSCM_IS_SORTED_H
-#define ONESIDEDCROSSINGNUMBER_OSCM_IS_SORTED_H
+#ifndef OSCM_IS_SORTED_H
+#define OSCM_IS_SORTED_H
 
 #include <cstdint>
 
@@ -13,4 +13,4 @@ namespace oscm {
     }
 }  // namespace oscm
 
-#endif  // ONESIDEDCROSSINGNUMBER_OSCM_IS_SORTED_H
+#endif  // OSCM_IS_SORTED_H

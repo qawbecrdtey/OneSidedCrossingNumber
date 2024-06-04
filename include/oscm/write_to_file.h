@@ -1,5 +1,5 @@
-#ifndef ONESIDEDCROSSINGNUMBER_OSCM_WRITE_TO_FILE_H
-#define ONESIDEDCROSSINGNUMBER_OSCM_WRITE_TO_FILE_H
+#ifndef OSCM_WRITE_TO_FILE_H
+#define OSCM_WRITE_TO_FILE_H
 
 #include <cstdint>
 #include <fstream>
@@ -19,4 +19,4 @@ namespace oscm {
     }
 }  // namespace oscm
 
-#endif  // ONESIDEDCROSSINGNUMBER_OSCM_WRITE_TO_FILE_H
+#endif  // OSCM_WRITE_TO_FILE_H

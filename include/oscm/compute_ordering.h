@@ -1,5 +1,5 @@
-#ifndef ONESIDEDCROSSINGNUMBER_OSCM_COMPUTE_ORDERING_H
-#define ONESIDEDCROSSINGNUMBER_OSCM_COMPUTE_ORDERING_H
+#ifndef OSCM_COMPUTE_ORDERING_H
+#define OSCM_COMPUTE_ORDERING_H
 
 #include <oscm/brute_force_ordering.h>
 #include <oscm/comparable.h>
@@ -397,4 +397,4 @@ namespace oscm {
     }
 }  // namespace oscm
 
-#endif  // ONESIDEDCROSSINGNUMBER_OSCM_COMPUTE_ORDERING_H
+#endif  // OSCM_COMPUTE_ORDERING_H

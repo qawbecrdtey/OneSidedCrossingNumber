@@ -1,5 +1,5 @@
-#ifndef ONESIDEDCROSSINGNUMBER_OSCM_DEPENDENT_H
-#define ONESIDEDCROSSINGNUMBER_OSCM_DEPENDENT_H
+#ifndef OSCM_DEPENDENT_H
+#define OSCM_DEPENDENT_H
 
 #include <oscm/comparable.h>
 
@@ -29,4 +29,4 @@ namespace oscm {
     }
 }  // namespace oscm
 
-#endif  // ONESIDEDCROSSINGNUMBER_OSCM_DEPENDENT_H
+#endif  // OSCM_DEPENDENT_H

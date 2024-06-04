@@ -1,5 +1,5 @@
-#ifndef ONESIDEDCROSSINGNUMBER_OSCM_RATIONAL_H
-#define ONESIDEDCROSSINGNUMBER_OSCM_RATIONAL_H
+#ifndef OSCM_RATIONAL_H
+#define OSCM_RATIONAL_H
 
 #include <cstdint>
 #include <numeric>
@@ -27,4 +27,4 @@ namespace oscm {
     };
 }  // namespace oscm
 
-#endif  // ONESIDEDCROSSINGNUMBER_OSCM_RATIONAL_H
+#endif  // OSCM_RATIONAL_H

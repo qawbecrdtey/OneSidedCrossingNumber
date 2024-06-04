@@ -1,5 +1,5 @@
-#ifndef ONESIDEDCROSSINGNUMBER_OSCM_CUSTOM_PATTERN_H
-#define ONESIDEDCROSSINGNUMBER_OSCM_CUSTOM_PATTERN_H
+#ifndef OSCM_CUSTOM_PATTERN_H
+#define OSCM_CUSTOM_PATTERN_H
 
 #include <algorithm>
 #include <any>
@@ -178,4 +178,4 @@ namespace oscm {
 
 }  // namespace oscm
 
-#endif  // ONESIDEDCROSSINGNUMBER_OSCM_CUSTOM_PATTERN_H
+#endif  // OSCM_CUSTOM_PATTERN_H

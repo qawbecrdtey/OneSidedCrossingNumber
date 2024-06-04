@@ -1,5 +1,5 @@
-#ifndef ONESIDEDCROSSINGNUMBER_OSCM_ISOLATED_H
-#define ONESIDEDCROSSINGNUMBER_OSCM_ISOLATED_H
+#ifndef OSCM_ISOLATED_H
+#define OSCM_ISOLATED_H
 
 #include <algorithm>
 
@@ -14,4 +14,4 @@ namespace oscm {
     }
 }  // namespace oscm
 
-#endif  // ONESIDEDCROSSINGNUMBER_OSCM_ISOLATED_H
+#endif  // OSCM_ISOLATED_H

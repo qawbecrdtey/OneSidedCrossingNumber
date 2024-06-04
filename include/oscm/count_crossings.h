@@ -1,5 +1,5 @@
-#ifndef ONESIDEDCROSSINGNUMBER_OSCM_COUNT_CROSSINGS_H
-#define ONESIDEDCROSSINGNUMBER_OSCM_COUNT_CROSSINGS_H
+#ifndef OSCM_COUNT_CROSSINGS_H
+#define OSCM_COUNT_CROSSINGS_H
 
 #include <oscm/comp_second.h>
 #include <oscm/segment_tree.h>
@@ -34,4 +34,4 @@ namespace oscm {
     }
 }  // namespace oscm
 
-#endif  // ONESIDEDCROSSINGNUMBER_OSCM_COUNT_CROSSINGS_H
+#endif  // OSCM_COUNT_CROSSINGS_H

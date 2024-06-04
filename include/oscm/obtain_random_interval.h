@@ -1,9 +1,10 @@
-#ifndef ONESIDEDCROSSINGNUMBER_OSCM_OBTAIN_RANDOM_INTERVAL_H
-#define ONESIDEDCROSSINGNUMBER_OSCM_OBTAIN_RANDOM_INTERVAL_H
+#ifndef OSCM_OBTAIN_RANDOM_INTERVAL_H
+#define OSCM_OBTAIN_RANDOM_INTERVAL_H
 
 #include <oscm/obtain_all_intervals.h>
 #include <oscm/random_unsigned_integer.h>
 
+#include <algorithm>
 #include <cstdint>
 #include <utility>
 #include <vector>
@@ -80,4 +81,4 @@ namespace oscm {
     }
 }  // namespace oscm
 
-#endif  // ONESIDEDCROSSINGNUMBER_OSCM_OBTAIN_RANDOM_INTERVAL_H
+#endif  // OSCM_OBTAIN_RANDOM_INTERVAL_H

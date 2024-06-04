@@ -1,5 +1,5 @@
-#ifndef ONESIDEDCROSSINGNUMBER_OSCM_COMPARABLE_H
-#define ONESIDEDCROSSINGNUMBER_OSCM_COMPARABLE_H
+#ifndef OSCM_COMPARABLE_H
+#define OSCM_COMPARABLE_H
 
 #include <oscm/exists_path.h>
 
@@ -40,4 +40,4 @@ namespace oscm {
     }
 }  // namespace oscm
 
-#endif  // ONESIDEDCROSSINGNUMBER_OSCM_COMPARABLE_H
+#endif  // OSCM_COMPARABLE_H

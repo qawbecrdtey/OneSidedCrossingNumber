@@ -18,19 +18,28 @@ set_target_properties(OneSidedCrossingNumber PROPERTIES CXX_STANDARD 26)
 target_include_directories(OneSidedCrossingNumber PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_compile_options(OneSidedCrossingNumber PRIVATE -Wall -Wextra -pedantic)
 
+add_executable(OneSidedCrossingNumberFaster oscm_exact_faster.cpp)
+set_target_properties(OneSidedCrossingNumberFaster PROPERTIES CXX_STANDARD 26)
+target_include_directories(OneSidedCrossingNumberFaster PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_compile_options(OneSidedCrossingNumberFaster PRIVATE -Wall -Wextra)
+
 message("${CMAKE_BUILD_TYPE}")
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
     target_compile_options(OneSidedCrossingNumber PRIVATE -O2 -DNDEBUG -march=native -ffast-math -fipa-pta -flto -fdevirtualize-at-ltrans -msse -msse2 -msse3 -mmmx -m3dnow)
+    target_compile_options(OneSidedCrossingNumberFaster PRIVATE -O2 -DNDEBUG -march=native -ffast-math -fipa-pta -flto -fdevirtualize-at-ltrans -msse -msse2 -msse3 -mmmx -m3dnow)
 endif()
 
 if(NO_COMMENTS)
     target_compile_definitions(OneSidedCrossingNumber PRIVATE NO_COMMENTS)
+    target_compile_definitions(OneSidedCrossingNumberFaster PRIVATE NO_COMMENTS)
 endif()
 
 if(DEBUG_MESSAGE)
     target_compile_definitions(OneSidedCrossingNumber PRIVATE DEBUG_MESSAGE)
+    target_compile_definitions(OneSidedCrossingNumberFaster PRIVATE DEBUG_MESSAGE)
 endif()
 
 if(ENABLE_TIMER)
     target_compile_definitions(OneSidedCrossingNumber PRIVATE ENABLE_TIMER)
+    target_compile_definitions(OneSidedCrossingNumberFaster PRIVATE ENABLE_TIMER)
 endif()

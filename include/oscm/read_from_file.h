@@ -1,5 +1,5 @@
-#ifndef ONESIDEDCROSSINGNUMBER_OSCM_READ_FILE_H
-#define ONESIDEDCROSSINGNUMBER_OSCM_READ_FILE_H
+#ifndef OSCM_READ_FILE_H
+#define OSCM_READ_FILE_H
 
 #include <oscm/comp_second.h>
 
@@ -78,4 +78,4 @@ namespace oscm {
         std::sort(connections_.begin(), connections_.end(), comp_second);
     }
 }  // namespace oscm
-#endif  // ONESIDEDCROSSINGNUMBER_OSCM_READ_FILE_H
+#endif  // OSCM_READ_FILE_H

@@ -1,5 +1,5 @@
-#ifndef ONESIDEDCROSSINGNUMBER_OSCM_EQUAL_NEIGHBOR_H
-#define ONESIDEDCROSSINGNUMBER_OSCM_EQUAL_NEIGHBOR_H
+#ifndef OSCM_EQUAL_NEIGHBOR_H
+#define OSCM_EQUAL_NEIGHBOR_H
 
 #include <oscm/comp_second.h>
 
@@ -49,4 +49,4 @@ namespace oscm {
     }
 }  // namespace oscm
 
-#endif  // ONESIDEDCROSSINGNUMBER_OSCM_EQUAL_NEIGHBOR_H
+#endif  // OSCM_EQUAL_NEIGHBOR_H

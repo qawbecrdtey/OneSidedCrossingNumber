@@ -1,5 +1,5 @@
-#ifndef ONESIDEDCROSSINGNUMBER_OSCM_COMP_SECOND_H
-#define ONESIDEDCROSSINGNUMBER_OSCM_COMP_SECOND_H
+#ifndef OSCM_COMP_SECOND_H
+#define OSCM_COMP_SECOND_H
 
 #include <cstdint>
 #include <utility>
@@ -12,4 +12,4 @@ namespace oscm {
     }
 }  // namespace oscm
 
-#endif  // ONESIDEDCROSSINGNUMBER_OSCM_COMP_SECOND_H
+#endif  // OSCM_COMP_SECOND_H
