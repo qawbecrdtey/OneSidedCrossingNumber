@@ -3,6 +3,7 @@
 
 #include <oscm/topological_sort.h>
 
+#include <algorithm>
 #include <cstdint>
 #include <ranges>
 #include <vector>
@@ -14,9 +15,8 @@ namespace oscm {
       std::vector<std::vector<std::uint32_t>> &directed_edges_,
       std::vector<std::uint32_t> const &topological_ordering_,
       std::unique_ptr<std::uint32_t[]> topological_ordering_inverse_) {
-        static std::uint64_t const N = directed_edges_.size();
-        static auto const set_union = std::make_unique<bool[]>(N * N);
-        std::fill_n(set_union.get(), N * N, false);
+        std::uint64_t const N = directed_edges_.size();
+        auto const set_union = std::make_unique<bool[]>(N * N);
         for(std::uint64_t i = 0; i < N * N; i += N + 1) { set_union[i] = true; }
 
         std::vector<std::vector<std::uint32_t>> result(N);

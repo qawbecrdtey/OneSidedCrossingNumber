@@ -18,11 +18,13 @@ namespace oscm {
     public:
         explicit bipartite_graph(
           std::uint32_t const nA_,
-          std::vector<std::uint32_t> side_B_,
+          std::vector<std::uint32_t>::iterator side_B_begin_,
+          std::vector<std::uint32_t>::iterator side_B_end_,
           std::vector<std::pair<std::uint32_t, std::uint32_t>> const &global_connections_)
          : _nA(nA_),
-           _nB(static_cast<std::uint32_t>(side_B_.size())),
-           _side_B(std::move(side_B_)),
+           _nB(static_cast<std::uint32_t>(side_B_end_ - side_B_begin_)),
+           _side_B_begin(side_B_begin_),
+           _side_B_end(side_B_end_),
            _global_connections(global_connections_),
            _crossings(0),
            _modified(true) {}
@@ -31,20 +33,18 @@ namespace oscm {
             if(!_modified) { return _crossings; }
             _crossings = 0;
             segment_tree tree(_nB);
-            for(auto const b: _side_B) {
+            for(auto it = _side_B_begin; it != _side_B_end; ++it) {
                 auto lo = std::lower_bound(
                   _global_connections.begin(),
                   _global_connections.end(),
-                  std::make_pair(0u, b),
+                  std::make_pair(0u, *it),
                   comp_second);
                 auto const hi = std::upper_bound(
                   _global_connections.begin(),
                   _global_connections.end(),
-                  std::make_pair(0u, b),
+                  std::make_pair(0u, *it),
                   comp_second);
-#if __has_cpp_attribute(assume)
                 [[assume(lo <= hi)]];
-#endif
 
                 while(lo < hi) {
                     _crossings += tree.sum(lo->first + 1, _nA);
@@ -56,24 +56,14 @@ namespace oscm {
             return _crossings;
         }
 
-        void reorder_side_B(std::vector<std::uint32_t> new_side_B_) {
-            assert(contains_equal_elements(_side_B, new_side_B_));
-#if __has_cpp_attribute(assume)
-            [[assume(contains_equal_elements(_side_B, new_side_B_))]];
-#endif
-
-            _side_B = std::move(new_side_B_);
-            _modified = true;
-        }
-
-        void reorder_side_B_with_directed_edges(std::vector<std::vector<std::uint32_t>> const &directed_edges_) {
-
-        }
+        void reorder_side_B_with_directed_edges(
+          std::vector<std::vector<std::uint32_t>> const &directed_edges_);
 
     private:
         std::uint32_t const _nA;
         std::uint32_t const _nB;
-        std::vector<std::uint32_t> _side_B;
+        std::vector<std::uint32_t>::iterator _side_B_begin;
+        std::vector<std::uint32_t>::iterator _side_B_end;
         std::vector<std::pair<std::uint32_t, std::uint32_t>> const &_global_connections;
         mutable std::uint32_t _crossings;
         mutable bool _modified;
