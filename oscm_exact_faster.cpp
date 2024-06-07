@@ -15,29 +15,23 @@
 #endif
 
 int main(int argc, char *argv[]) {
-#if __has_cpp_attribute(assume)
     [[assume(argc > 0)]];
-#endif
     if(argc != 3) {
         std::cerr << "usage: " << argv[0] << " [path/to/input] [path/to/output]" << std::endl;
         return 1;
     }
-#if __has_cpp_attribute(assume)
     [[assume(argv[0])]];
     [[assume(argv[1])]];
     [[assume(argv[2])]];
     [[assume(!argv[3])]];
-#endif
 
     std::uint32_t nA;
     std::uint32_t nB;
     std::vector<std::pair<std::uint32_t, std::uint32_t>> connections;
     oscm::read_from_file(argv[1], nA, nB, connections);
     assert(nA > 0 && nB > 0);
-#if __has_cpp_attribute(assume)
     [[assume(nA > 0)]];
     [[assume(nB > 0)]];
-#endif
 
 #if DEBUG_MESSAGE
 

@@ -167,12 +167,11 @@ namespace oscm {
         std::vector<std::vector<std::uint32_t>> next_directed_edges;
         if(!random_unsigned_integer(0, nA_ + nB_)) {
             next_directed_edges = transitive_reduction(
-              directed_edges_, topological_ordering, std::move(topological_ordering_inverse));
+              directed_edges_, topological_ordering, topological_ordering_inverse.get());
             release_vector_memory(directed_edges_);
         }
         else {
             next_directed_edges = std::move(directed_edges_);
-            topological_ordering_inverse.reset();  // Release memory.
         }
 
         // auto next_directed_edges = transitive_reduction(
@@ -347,7 +346,6 @@ namespace oscm {
         }
         }
     }
-
 
     // TODO: Fix below.
     /**

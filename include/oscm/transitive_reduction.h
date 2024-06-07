@@ -14,7 +14,7 @@ namespace oscm {
     transitive_reduction(
       std::vector<std::vector<std::uint32_t>> &directed_edges_,
       std::vector<std::uint32_t> const &topological_ordering_,
-      std::unique_ptr<std::uint32_t[]> topological_ordering_inverse_) {
+      std::uint32_t const *topological_ordering_inverse_) {
         std::uint64_t const N = directed_edges_.size();
         auto const set_union = std::make_unique<bool[]>(N * N);
         for(std::uint64_t i = 0; i < N * N; i += N + 1) { set_union[i] = true; }
@@ -53,7 +53,7 @@ namespace oscm {
             topological_ordering_inverse[topological_ordering_[i]] = i;
         }
         return transitive_reduction(
-          directed_edges_, topological_ordering_, std::move(topological_ordering_inverse));
+          directed_edges_, topological_ordering_, topological_ordering_inverse.get());
     }
 }  // namespace oscm
 

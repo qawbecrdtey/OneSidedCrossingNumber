@@ -17,6 +17,7 @@ namespace oscm {
         segment_tree const tree(n1_);
         std::uint64_t res = 0;
         for(std::uint32_t i = 0; i < n2_; i++) {
+            assert(v2_[i] >= n1_);
             auto lo = std::lower_bound(
               connections_.begin(), connections_.end(), std::make_pair(0u, v2_[i]), comp_second);
             auto const hi = std::upper_bound(

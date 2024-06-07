@@ -71,7 +71,10 @@ namespace oscm {
      * TODO: fill below.
      * @param directed_edges_ underlying graph.
      * @return a tuple (fixed_points, topological_ordering, topological_ordering_inverse) of \p
-     * directed_edges_.
+     * directed_edges_ .\n
+     * \p fixed_points is a vector of indices of \p directed_edges_ which are fixed.\n
+     * \p topological_ordering is one ordering of indices of \p directed_edges_ .\n
+     * \p topological_ordering_inverse is an inverse map of \p topological_ordering .
      */
     __attribute__((flatten)) inline std::
       tuple<std::vector<std::uint32_t>, std::vector<std::uint32_t>, std::unique_ptr<std::uint32_t[]>>
